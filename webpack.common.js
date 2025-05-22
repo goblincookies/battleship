@@ -10,11 +10,11 @@ module.exports = {
   },
   devtool: "eval-source-map",
   devServer: {
-    watchFiles: ["./src/pages/template.html"],
+    watchFiles: ["./src/template.html"],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/pages/template.html",
+      template: "./src/template.html",
     }),
   ],
   module: {
