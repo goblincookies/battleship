@@ -12,6 +12,7 @@
     "scripts": {
       "build": "webpack --config webpack.prod.js",
       "dev": "webpack serve --open --config webpack.dev.js",
+      "sync": "git checkout gh-pages && git merge main --no-edit",
       "deploy": "git subtree push --prefix dist origin gh-pages"
   }
 }
