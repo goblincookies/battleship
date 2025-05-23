@@ -31,13 +31,17 @@ function interact( e ) {
         case 'START':
             newPage = page.START;
             break;
-        case deepLore.Get_ID_Setup_play:
+        case deepLore.getID_Start_play:
             console.log( 'setup!' );
             newPage = page.SETUP;
             break;
-        case deepLore.Get_ID_Setup_quickgame:
+        case deepLore.getID_Start_quickgame:
             console.log( 'quickgame' );
             newPage = page.GAME;
+            break;
+        case deepLore.getID_Setup_back:
+            console.log( 'back!' );
+            newPage = page.START;
             break;
         default:
             break;
@@ -56,16 +60,24 @@ function loadPage( pageToLoad ){
     switch( pageToLoad ) {
         case page.START:
             console.log( 'loading start page!')
+            pageBuilder.modify_ContentCenter( content );
             content.appendChild( pageBuilder.getHTML_Start() );
-            deepLore.Get_Button_Setup_Play.addEventListener( 'click', interact );
-            deepLore.Get_Button_Setup_QuickGame.addEventListener( 'click', interact );
+            deepLore.getButton_Start_Play.addEventListener( 'click', interact );
+            deepLore.getButton_Start_QuickGame.addEventListener( 'click', interact );
             break;
 
         case page.SETUP:
             console.log( 'loading SETUP!');
+            pageBuilder.modify_ContentTop( content );
+            content.appendChild( pageBuilder.getHTML_Setup_Title() );
+
+            console.log( 'back button' );
+            console.log( deepLore.getButton_Setup_Back )
+            deepLore.getButton_Setup_Back.addEventListener( 'click', interact );
+
             break;
         case page.GAME:
-            console.log( 'loading SETUP!');
+            console.log( 'loading GAME!');
             break;
         default:
             console.log( "didn't find page" );

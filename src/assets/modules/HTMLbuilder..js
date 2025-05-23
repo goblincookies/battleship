@@ -2,6 +2,10 @@ import f_logo from '../images/logo-plain.png'
 
 const ID_play = 'setup';
 const ID_quickgame = 'quick-game';
+const ID_setup_back = 'setup-back';
+const ID_setup_text = 'setup-text';
+
+
 // HELPER CLASS FOR BUILDING HTML ELEMENTS
 class PageBuilder {
 
@@ -79,15 +83,71 @@ class PageBuilder {
         return mainDiv;
     };
 
+    getHTML_Setup_Title(){
+        // <div class="flex-v-center marg-top min-height debugB">
+        //     <div class="title debugC">
+        //         <img class="logo-sm shadow" src="../assets/images/logo-plain.png" alt="">
+        //     </div>
+        //     <div class="button-tray flex-h-center center debugA">
+        //         <div class="safetybox flex-h-center wide grow">
+        //             <button class="pill pad-sides" id="quick-game"> <p class="glow-pink">Back </p></button>
+        //         </div>
+        //         <div class="saftybox flex-h-center wide grow">
+        //             <p class="basic">Place your ships<br>tap to rotate</p>
+        //         </div>
+        //     </div>
+        // </div>
+        const mainDiv = this.createElement( 'div', 'flex-v-center marg-top min-height' );
+        const titleDiv = this.createElement( 'div', 'title' );
+        const titleImg = this.createElement( 'img', 'logo-sm shadow', f_logo );
+        const trayDiv = this.createElement( 'div', 'button-tray flex-h-center center' );
+        const safetyboxPillDiv = this.createElement( 'div', 'safetybox flex-h-center wide grow' );
+        const pillButton = this.createElement( 'button', 'pill pad-sides' );
+        const backP = this.createElement( 'p', 'glow-pink' );
+        const safetyboxTextDiv = this.createElement( 'div', 'safetybox flex-h-center wide grow' );
+        const textP = this.createElement( 'p', 'basic' );
+
+        backP.textContent = 'back';
+        textP.textContent = 'Select your difficulty';
+
+        pillButton.id = ID_setup_back;
+        textP.id = ID_setup_text;
+
+        pillButton.appendChild( backP );
+        safetyboxPillDiv.appendChild( pillButton );
+        safetyboxTextDiv.appendChild( textP );
+
+        trayDiv.appendChild( safetyboxPillDiv );
+        trayDiv.appendChild( safetyboxTextDiv );
+
+        titleDiv.appendChild( titleImg );
+
+        mainDiv.appendChild( titleDiv );
+        mainDiv.appendChild( trayDiv );
+
+        return mainDiv;        
+    };
+
+    modify_ContentTop( html ) {
+        html.classList.remove( 'flex-v-center' );
+        html.classList.add( 'flex-v-start' );
+    };
+    
+    modify_ContentCenter( html ) {
+        html.classList.remove( 'flex-v-start' );
+        html.classList.add( 'flex-v-center' );
+    };
 }
 
 class DeepLore {
 
-    get Get_Button_Setup_Play(){ return document.getElementById( ID_play ) };
-    get Get_Button_Setup_QuickGame(){ return document.getElementById( ID_quickgame ) };
+    get getButton_Start_Play(){ return document.getElementById( ID_play ) };
+    get getButton_Start_QuickGame(){ return document.getElementById( ID_quickgame ) };
+    get getButton_Setup_Back(){ return document.getElementById( ID_setup_back ) };
 
-    get Get_ID_Setup_play() { return ID_play; }
-    get Get_ID_Setup_quickgame() { return ID_quickgame; }
+    get getID_Start_play() { return ID_play; }
+    get getID_Start_quickgame() { return ID_quickgame; }
+    get getID_Setup_back() { return ID_setup_back; }
 
 }
 
