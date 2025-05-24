@@ -74,6 +74,7 @@ body {
     width:100%;
     gap: 1rem;
 }
+.hidden{ visibility: hidden; }
 .stacker-tray>*:nth-child(2) {
         order: 3;
         /* background-color: red; */
@@ -302,8 +303,8 @@ button.text:hover {
     mask:
         linear-gradient(to right, white 2px, transparent 2px),
         linear-gradient(to bottom, white 2px, transparent 2px);
-    mask-size: calc(100%/6 + 1px) calc(100% / 6 + 1px);
-    mask-position: -2px -2px;
+    mask-size: calc(100%/6) calc(100% / 6);
+    mask-position: -1px -1px;
     mask-repeat:repeat;
     background-blend-mode:multiply;
     border-radius: 30px;

@@ -18,6 +18,12 @@ const subpage = {
     DONE:3,
 }
 
+const difficulty = {
+    EASY: 0,
+    NORMAL: 1,
+    HARD: 2
+}
+
 const pageBuilder = new PageBuilder();
 const deepLore = new DeepLore();
 
@@ -25,6 +31,7 @@ const content = document.getElementById( 'content' );
 let actionBar;
 let currentPage = page.UNKOWN;
 let currentSubPage = page.UNKOWN;
+let currentDifficulty = difficulty.NORMAL;
 
 
 function setup(){
@@ -33,6 +40,8 @@ function setup(){
     currentPage = page.START;
     loadPage( currentPage );
 }
+
+function gridSize( diff ){ return  6 + ( 3 * diff ); }
 
 function interact( e ) {
     let newPage = page.UNKOWN;
@@ -46,7 +55,6 @@ function interact( e ) {
             console.log( 'setup!' );
             newPage = page.SETUP;
             currentSubPage = subpage.DIFFICULTY;
-
             break;
         case deepLore.getID_Start_quickgame:
             console.log( 'quickgame' );
@@ -80,6 +88,18 @@ function interact( e ) {
             };
 
             break;
+        case deepLore.getID_Setup_easy:
+            currentDifficulty = difficulty.EASY;
+            changeDifficulty( currentDifficulty );
+            break;
+        case deepLore.getID_Setup_normal:
+            currentDifficulty = difficulty.NORMAL;
+            changeDifficulty( currentDifficulty );
+            break;
+        case deepLore.getID_Setup_hard:
+            currentDifficulty = difficulty.HARD;
+            changeDifficulty( currentDifficulty );
+            break;
         default:
             break;
     };
@@ -92,6 +112,25 @@ function interact( e ) {
     };
 };
 
+function changeDifficulty( currDiff ){
+    const buttons = [
+        deepLore.getSetup_Easy,
+        deepLore.getSetup_Normal,
+        deepLore.getSetup_Hard
+    ]
+
+    for( let i = 0; i < Object.keys( difficulty ).length; i++ ){
+        if ( i == currDiff ){
+            pageBuilder.modify_TextSelect( buttons[ i ] );
+        } else{
+            pageBuilder.modify_TextDeselect( buttons[ i ] );
+        };
+    };
+    pageBuilder.modify_GraphPaper( deepLore.getSetup_GraphPaper, gridSize(currDiff) )
+    // pageBuilder.modify_TextSelect( deepLore.getSetup_Easy );
+    // console.log( 'easy peasy' );
+    // document.querySelector
+};
 
 function loadPage( pageToLoad ){
     precleaning();
@@ -114,7 +153,8 @@ function loadPage( pageToLoad ){
             pageBuilder.modify_ContentWide( content );
 
             content.appendChild( pageBuilder.getHTML_Setup_Title() );
-            content.appendChild( pageBuilder.getHTML_Setup_Main() );
+            content.appendChild( pageBuilder.getHTML_Setup_Main( gridSize( currentDifficulty ) ) );
+            // pageBuilder.modify_GraphPaper( deepLore.getSetup_GraphPaper, gridSize( currDiff ) );
 
             actionBar = deepLore.getSetup_ActionBar;
 
@@ -144,7 +184,11 @@ function loadSubPage( pageToLoad ) {
         switch( pageToLoad ) {
     
             case subpage.DIFFICULTY:
-                actionBar.appendChild( pageBuilder.getHTML_Setup_Difficulty() );
+                // console.log( 'currentDifficulty:', currentDifficulty );
+                actionBar.appendChild( pageBuilder.getHTML_Setup_Difficulty( currentDifficulty ) );
+                deepLore.getSetup_Easy.addEventListener( 'click', interact );
+                deepLore.getSetup_Normal.addEventListener( 'click', interact );
+                deepLore.getSetup_Hard.addEventListener( 'click', interact );
                 break;
     
             case subpage.PLACE:

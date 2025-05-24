@@ -8,7 +8,10 @@ const ID_setup_text = 'setup-text';
 const ID_setup_actionbar = 'action-bar';
 const ID_setup_random = 'random';
 const ID_setup_next = 'next';
-
+const ID_setup_easy = 'easy';
+const ID_setup_normal = 'normal';
+const ID_setup_hard = 'hard';
+const ID_setup_graphpaper = 'graph-paper'
 
 // HELPER CLASS FOR BUILDING HTML ELEMENTS
 class PageBuilder {
@@ -132,7 +135,7 @@ class PageBuilder {
         return mainDiv;        
     };
 
-    getHTML_Setup_Main(){
+    getHTML_Setup_Main( graphpapersize ){
         // <div class="grow stacker-tray center debugA">
         //     <div class="game-size centerpiece debugB">
         //         <div class="box glow">
@@ -169,7 +172,7 @@ class PageBuilder {
         const actionBarDiv = this.createElement( 'div', 'wide grow flex-v-center min-height' )
         const trayDiv = this.createElement( 'div', 'button-tray flex-h-center center' );
         const safetyboxPillDiv = this.createElement( 'div', 'safetybox flex-h-center wide grow' );
-        const pillButton = this.createElement( 'button', 'pill pad-sides' );
+        const pillButton = this.createElement( 'button', 'pill pad-sides hidden' );
         const pillP = this.createElement( 'p', 'glow-pink' );
         const safetyboxTextDiv = this.createElement( 'div', 'safetybox flex-h-center wide grow' );
         const textButton = this.createElement( 'button', 'text pad-sides' );
@@ -182,6 +185,7 @@ class PageBuilder {
         actionBarDiv.id = ID_setup_actionbar;
         pillButton.id = ID_setup_random;
         textButton.id = ID_setup_next;
+        graphDiv.id = ID_setup_graphpaper;
 
         boxDiv.appendChild( graphDiv );
         centerpieceDiv.appendChild( boxDiv );
@@ -200,10 +204,12 @@ class PageBuilder {
         mainDiv.appendChild( centerpieceDiv );
         mainDiv.appendChild( otherDiv );
 
+        this.modify_GraphPaper( graphDiv, graphpapersize );
+
         return mainDiv;
     };
 
-    getHTML_Setup_Difficulty(){
+    getHTML_Setup_Difficulty( currDiff ){
         // <ul class="difficulty flex-v-center wide tall">
         //     <li>
         //         <div class="safetybox flex-h-center wide grow debugA">
@@ -236,7 +242,13 @@ class PageBuilder {
         secondP.textContent = 'normal';
         thirdP.textContent = 'hard';
 
-        this.modify_TextSelect( secondP );
+        firstButton.id = ID_setup_easy;
+        secondButton.id = ID_setup_normal;
+        thirdButton.id = ID_setup_hard;
+
+
+        // secondP.classList.add()
+        // this.modify_TextSelect( secondP );
 
         firstButton.appendChild( firstP );
         firstDiv.appendChild( firstButton );
@@ -254,6 +266,15 @@ class PageBuilder {
         mainUl.appendChild( secondLi );
         mainUl.appendChild( thirdLi );
 
+        console.log('currDiff:', currDiff );
+
+        if( currDiff < 1 ){
+            this.modify_TextSelect( firstButton );
+        } else if ( currDiff < 2 ){
+            this.modify_TextSelect( secondButton );
+        } else {
+            this.modify_TextSelect( thirdButton );
+        }
         return mainUl;
     };
 
@@ -262,11 +283,18 @@ class PageBuilder {
         return mainDiv;
     };
 
+    modify_GraphPaper( html, size ){
+        console.log('this registering?');
+        // html.style.maskSize = `calc(100% / ${ size } + 1px) calc(100% / ${ size } + 1px)`;
+        html.style.maskSize = `calc(100% / ${ size }) calc(100% / ${ size })`;
+
+    };
+
     modify_TextSelect( html ){
-        html.classList.add( 'selected' );
+        html.querySelector('p').classList.add( 'selected' );
     }
     modify_TextDeselect( html ){
-        html.classList.remove( 'selected' );
+        html.querySelector('p').classList.remove( 'selected' );
     }
 
     modify_ContentTop( html ) {
@@ -299,6 +327,11 @@ class DeepLore {
     get getSetup_Next(){ return document.getElementById( ID_setup_next ) };
     get getSetup_Random(){ return document.getElementById( ID_setup_random ) };
     get getSetup_ActionBar(){ return document.getElementById( ID_setup_actionbar ) };
+    get getSetup_Easy(){ return document.getElementById( ID_setup_easy ) };
+    get getSetup_Normal(){ return document.getElementById( ID_setup_normal ) };
+    get getSetup_Hard(){ return document.getElementById( ID_setup_hard ) };
+    get getSetup_GraphPaper(){ return document.getElementById( ID_setup_graphpaper ) };
+
 
     get getID_Start_play() { return ID_play };
     get getID_Start_quickgame() { return ID_quickgame };
@@ -306,6 +339,9 @@ class DeepLore {
     get getID_Setup_back() { return ID_setup_back };
     get getID_Setup_next() { return ID_setup_next };
     get getID_Setup_random() { return ID_setup_random };
+    get getID_Setup_easy() { return ID_setup_easy };
+    get getID_Setup_normal() { return ID_setup_normal };
+    get getID_Setup_hard() { return ID_setup_hard };
 
 }
 
