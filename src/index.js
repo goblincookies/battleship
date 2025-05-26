@@ -133,7 +133,7 @@ function changeDifficulty( currDiff ){
 };
 
 function loadPage( pageToLoad ){
-    precleaning();
+    preCleaning();
 
     // RENDER THE PAGE
     switch( pageToLoad ) {
@@ -192,7 +192,7 @@ function loadSubPage( pageToLoad ) {
                 break;
     
             case subpage.PLACE:
-                actionBar.appendChild( pageBuilder.getHTML_Setup_Place() );
+                actionBar.appendChild( pageBuilder.getHTML_Setup_Shipshelf() );
                 break;
                 
             default:
@@ -201,7 +201,7 @@ function loadSubPage( pageToLoad ) {
     };
 };
 
-function precleaning(){
+function preCleaning(){
     content.textContent = '';
     actionBar = null;
 }

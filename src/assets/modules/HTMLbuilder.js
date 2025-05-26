@@ -11,7 +11,13 @@ const ID_setup_next = 'next';
 const ID_setup_easy = 'easy';
 const ID_setup_normal = 'normal';
 const ID_setup_hard = 'hard';
-const ID_setup_graphpaper = 'graph-paper'
+const ID_setup_graphpaper = 'graph-paper';
+const ID_ship5 = 'ship-5';
+const ID_ship4 = 'ship-4';
+const ID_ship3a = 'ship-3a';
+const ID_ship3b = 'ship-3b';
+const ID_ship2 = 'ship-2';
+
 
 // HELPER CLASS FOR BUILDING HTML ELEMENTS
 class PageBuilder {
@@ -143,7 +149,7 @@ class PageBuilder {
         //         </div>
         //     </div>
 
-        //     <div class="game-size flex-v-center-align debugC">
+        //     <div class="info-size flex-v-center-align debugC">
         //         <div class="wide grow flex-v-center min-height debugA" id="action-bar">
                     // DIFFICULTY
                     // SHIPS
@@ -165,10 +171,10 @@ class PageBuilder {
         // </div>
 
         const mainDiv = this.createElement( 'div', 'grow stacker-tray center' );
-        const centerpieceDiv = this.createElement( 'div', 'game-size centerpiece' );
+        const centerpieceDiv = this.createElement( 'div', 'game-size flex-v-center centerpiece' );
         const boxDiv = this.createElement( 'div', 'box glow');
         const graphDiv = this.createElement( 'div', 'graph-paper wide tall play-box' );
-        const otherDiv = this.createElement( 'div', 'game-size flex-v-center-align' );
+        const otherDiv = this.createElement( 'div', 'info-size flex-v-center-align debugA' );
         const actionBarDiv = this.createElement( 'div', 'wide grow flex-v-center min-height' )
         const trayDiv = this.createElement( 'div', 'button-tray flex-h-center center' );
         const safetyboxPillDiv = this.createElement( 'div', 'safetybox flex-h-center wide grow' );
@@ -278,9 +284,35 @@ class PageBuilder {
         return mainUl;
     };
 
-    getHTML_Setup_Place(){
-        const mainDiv = this.createElement('div', '' );
-        return mainDiv;
+    getHTML_Setup_Shipshelf(){
+        // <ul class="wide piece-tray debugB">
+        //     <li class="block ship-grad" id="block-5"></li>
+        //     <li class="block ship-grad" id="block-2"></li>
+        //     <li class="block ship-grad" id="block-3a"></li>
+        //     <li class="block ship-grad" id="block-4"></li>
+        //     <li class="block ship-grad" id="block-3b"></li>
+        // </ul>
+
+        const mainUl = this.createElement('ul', 'wide piece-tray' );
+        const ship5li = this.createElement('li', 'block ship-grad' );
+        const ship4li = this.createElement('li', 'block ship-grad' );
+        const ship3ali = this.createElement('li', 'block ship-grad' );
+        const ship3bli = this.createElement('li', 'block ship-grad' );
+        const ship2li = this.createElement('li', 'block ship-grad' );
+
+        ship5li.id = ID_ship5;
+        ship4li.id = ID_ship4;
+        ship3ali.id = ID_ship3a;
+        ship3bli.id = ID_ship3b;
+        ship2li.id = ID_ship2;
+
+        mainUl.appendChild( ship5li );
+        mainUl.appendChild( ship2li );
+        mainUl.appendChild( ship4li );
+        mainUl.appendChild( ship3ali );
+        mainUl.appendChild( ship3bli );
+
+        return mainUl;
     };
 
     modify_GraphPaper( html, size ){

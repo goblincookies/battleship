@@ -29,6 +29,7 @@
 
 }
 body {
+    height: fit-content;
     width: 100%;
     padding-bottom: 2rem;
 }
@@ -63,6 +64,9 @@ body {
 .relative{ position: relative; }
 .rad-grad{ background: radial-gradient(circle, var(--dark) 15%,var(--black) 90%); }
 .absolute{ position: absolute; }
+.fixed{ 
+    /* background-color: red; */
+    position: fixed; }
 .behind{ z-index: -1; }
 .grow{ flex-grow: 1; }
 .tray-height{ height: min(80%, 400px); }
@@ -80,6 +84,11 @@ body {
         /* background-color: red; */
     }
 .game-size {
+    aspect-ratio: 1;
+    width: 100%;
+    max-height: 90vh;
+}
+.info-size{
     aspect-ratio: 1;
     width: 100%;
 }
@@ -211,11 +220,12 @@ button.text:hover {
     }
 }
 .piece-tray{
-    padding-left: 1rem;
+    /* padding-left: 1rem; */
     /* height: 100%; */
-    display: grid;
-    grid-template-columns: repeat(5, auto);
-    grid-template-rows: repeat(3, auto);
+    display: flex;
+    flex-wrap: wrap;
+    /* grid-template-columns: repeat(5, auto); */
+    /* grid-template-rows: repeat(3, auto); */
     gap: 1rem;
     /* row-gap: 1rem; */
 }
@@ -226,30 +236,21 @@ button.text:hover {
     row-gap: 0.2rem;
 }
 
-#block-5{
-    /* background-color: #93eff3; */
-    grid-column: 1 / span 5;
+#ship-5{
+    width: calc(90px*5);
 }
 
-#block-4{
-    background-color: #fca2ff;
-    grid-row: 2;
-    grid-column: 1 / span 4;
+#ship-4{
+    width: calc(90px*4);
 }
-#block-2{
-    background-color: #dcdcdc;
-    grid-row: 2;
-    grid-column: 5 / span 2;
+#ship-2{
+    width: calc(90px*2);
 }
-#block-3a{
-    background-color: #dcdcdc;
-    grid-row: 3;
-    grid-column: 1 / span 3;
+#ship-3a{
+    width: calc(90px*3);
 }
-#block-3b{
-    background-color: #dcdcdc;
-    grid-row: 3;
-    grid-column: 4 / span 3;
+#ship-3b{
+    width: calc(90px*3);
 }
 
 #status-5{
@@ -289,10 +290,12 @@ button.text:hover {
 
 .block{
     position: relative;
-    width: 100%;
-    height: 100%;
+    height: 90px;
+    outline: 2px solid white;
     border: 3px solid black;
-    background-color: var(--dark);
+    /* height: 100%; */
+    /* width: 100%; */
+    /* background-color: var(--dark); */
 }
 .ship-grad{
     background-image: linear-gradient(to right, yellow, blue, red);
@@ -312,8 +315,8 @@ button.text:hover {
 .box{
     border-radius: 30px;
     aspect-ratio: 1;
-    width: 100%;
-    height: auto;
+    width: auto;
+    height: 100%;
     outline: 2px solid var(--pink);
     overflow: hidden;
     background-image: linear-gradient(to bottom, var(--blackamber), var(--grayblue));
@@ -341,13 +344,10 @@ button.text:hover {
     .tray-height{ height: min-content; }
     .block{
         border: 2px solid black;
-    }
-
-    .shelf{
         height: 40px;
-        border: 1px solid black;
+        /* border: 1px solid black; */
         outline: 2px solid white;
-    }   
+    }
     .stacker-tray {
         flex-direction: column;
         justify-content: flex-start;
@@ -357,10 +357,17 @@ button.text:hover {
         order: 0;
     }
     .game-size {
-        aspect-ratio: 1;
+        /* aspect-ratio: 1; */
+        /* width: 100%; */
         height: 60%;
+        width: inherit;
         max-width: 100%;
-        width: auto;
+    }
+    .info-size {
+        aspect-ratio: inherit;
+        height: 60%;
+        width: inherit;
+        max-width: 100%;
     }
     .graph-paper{
         border-radius: 10px;
