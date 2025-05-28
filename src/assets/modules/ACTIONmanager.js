@@ -97,7 +97,7 @@ class Interaction {
 
             this.cssToOffset( this.draggingItem.style.transform );
             this.dropboxes = document.querySelectorAll( '.drop-box' );
-            this.fauxShadow.classList.remove( 'hidden' );
+            // this.fauxShadow.classList.remove( 'hidden' );
 
         };
 

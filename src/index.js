@@ -53,7 +53,12 @@ function resizeWindow( e ) {
     if( currentSubPage == subpage.PLACE ) {
         let height = pageBuilder.getHeight( deepLore.getSetup_GraphPaper );
         height = shipHeight( height, currentDifficulty );
-        pageBuilder.modify_shipSize();
+        const allShips = document.querySelectorAll( '.ship' );
+        interactShipShelf.update_grid( height );
+        allShips.forEach( ship => {
+            pageBuilder.modify_shipSize( ship, height );
+        });
+
     };
 };
 

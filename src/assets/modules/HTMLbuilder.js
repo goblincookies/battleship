@@ -312,11 +312,11 @@ class PageBuilder {
         // </ul>
 
         const mainUl = this.createElement('div', 'wide piece-tray drop-box reset' );
-        const ship5li = this.createElement('div', 'block drag ship-grad' );
-        const ship4li = this.createElement('div', 'block drag ship-grad' );
-        const ship3ali = this.createElement('div', 'block drag ship-grad' );
-        const ship3bli = this.createElement('div', 'block drag ship-grad' );
-        const ship2li = this.createElement('div', 'block drag ship-grad' );
+        const ship5li = this.createElement('div', 'ship block drag ship-grad' );
+        const ship4li = this.createElement('div', 'ship block drag ship-grad' );
+        const ship3ali = this.createElement('div', 'ship block drag ship-grad' );
+        const ship3bli = this.createElement('div', 'ship block drag ship-grad' );
+        const ship2li = this.createElement('div', 'ship block drag ship-grad' );
 
         mainUl.id = ID_setup_pieceTray;
         ship5li.id = ID_ship5;
@@ -357,8 +357,9 @@ class PageBuilder {
         return html.getBoundingClientRect().height;
     };
 
-    modify_shipSize(){
-
+    modify_shipSize( html, height ){
+        html.style.height = height + 'px';
+        html.style.width = height * parseInt( html.id.split('-')[1] ) + 'px';
     };
 
     modify_GraphPaper( html, size ){
