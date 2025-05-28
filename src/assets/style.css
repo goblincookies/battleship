@@ -40,11 +40,13 @@ body {
 .debugE { background-color: red;}
 .debugF { background-color: green;}
 .debugG { background-color: blue;}
-
+.drag { cursor: pointer; }
 .max-height { height: 100vh; }
 .center { margin: auto;}
 .wide { width: 100%; }
 .tall { height: 100%; }
+.half { height: 33%; }
+
 .min-height { height: min-content; }
 .ideal-size {
     width: min(660px, 90%);
@@ -236,21 +238,19 @@ button.text:hover {
     row-gap: 0.2rem;
 }
 
-#ship-5{
+.faux-drop{
+    transform: translate(94px, 94px);
+    z-index: 4;
+    /* outline: 4px solid var(--dark); */
+    border: 6px solid black;
+    position: absolute;
+    height: 92px;
+    width: calc( 93px * 5 );
+    background-color: var(--dark);
+    /* border-top-left-radius: 15px; */
+}
+#gra5{
     width: calc(90px*5);
-}
-
-#ship-4{
-    width: calc(90px*4);
-}
-#ship-2{
-    width: calc(90px*2);
-}
-#ship-3a{
-    width: calc(90px*3);
-}
-#ship-3b{
-    width: calc(90px*3);
 }
 
 #status-5{
@@ -287,10 +287,23 @@ button.text:hover {
     outline: 2px solid white;
     background-color: red;
 }
-
+.dragging{
+    z-index: 3;
+    position: absolute;
+    border: 6px solid black;
+    color: var( --blue );
+}
+.placed{
+    z-index: 3;
+    position: absolute;
+    /* border: 6px solid black; */
+    outline: 2px solid white;
+    border: 3px solid black;
+}
 .block{
+    z-index: 3;
     position: relative;
-    height: 90px;
+    height: 34px;
     outline: 2px solid white;
     border: 3px solid black;
     /* height: 100%; */
@@ -310,10 +323,10 @@ button.text:hover {
     mask-position: -1px -1px;
     mask-repeat:repeat;
     background-blend-mode:multiply;
-    border-radius: 30px;
+    border-radius: 15px;
 }
 .box{
-    border-radius: 30px;
+    border-radius: 15px;
     aspect-ratio: 1;
     width: auto;
     height: 100%;
@@ -344,7 +357,7 @@ button.text:hover {
     .tray-height{ height: min-content; }
     .block{
         border: 2px solid black;
-        height: 40px;
+        /* height: 40px; */
         /* border: 1px solid black; */
         outline: 2px solid white;
     }

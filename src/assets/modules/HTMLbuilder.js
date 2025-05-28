@@ -17,6 +17,10 @@ const ID_ship4 = 'ship-4';
 const ID_ship3a = 'ship-3a';
 const ID_ship3b = 'ship-3b';
 const ID_ship2 = 'ship-2';
+const ID_setup_fauxdrop = 'faux-drop';
+const ID_setup_pieceTray = 'piece-tray';
+const ID_setup_gridDrop = 'grid-drop';
+
 
 
 // HELPER CLASS FOR BUILDING HTML ELEMENTS
@@ -143,8 +147,14 @@ class PageBuilder {
 
     getHTML_Setup_Main( graphpapersize ){
         // <div class="grow stacker-tray center debugA">
+        //     <ul>
+        //     </ul>
         //     <div class="game-size centerpiece debugB">
-        //         <div class="box glow">
+        //          <div class="box glow relative">    
+        //                 <ul class="relative drop drop-box">
+        //                     <li class="faux-drop hidden" id="faux-drop"></li>
+        //                 </ul>
+                        
         //             <div class="graph-paper wide tall play-box"></div>
         //         </div>
         //     </div>
@@ -171,8 +181,11 @@ class PageBuilder {
         // </div>
 
         const mainDiv = this.createElement( 'div', 'grow stacker-tray center' );
+        // const dragUL = this.createElement('ul', 'absolute wide tall debugA' )
         const centerpieceDiv = this.createElement( 'div', 'game-size flex-v-center centerpiece' );
-        const boxDiv = this.createElement( 'div', 'box glow');
+        const boxDiv = this.createElement( 'div', 'box glow relative');
+        const dropUl = this.createElement( 'div', 'absolute drop drop-box wide tall float' );
+        const fauxLi = this.createElement( 'div', 'faux-drop hidden' );
         const graphDiv = this.createElement( 'div', 'graph-paper wide tall play-box' );
         const otherDiv = this.createElement( 'div', 'info-size flex-v-center-align debugA' );
         const actionBarDiv = this.createElement( 'div', 'wide grow flex-v-center min-height' )
@@ -187,12 +200,16 @@ class PageBuilder {
         pillP.textContent = 'random layout';
         textP.textContent = 'Next';
 
-
+        // dragUL.id = ID_setup_safeSpace;
         actionBarDiv.id = ID_setup_actionbar;
         pillButton.id = ID_setup_random;
         textButton.id = ID_setup_next;
         graphDiv.id = ID_setup_graphpaper;
+        fauxLi.id = ID_setup_fauxdrop;
+        dropUl.id = ID_setup_gridDrop;
 
+        dropUl.appendChild( fauxLi );
+        boxDiv.appendChild( dropUl );
         boxDiv.appendChild( graphDiv );
         centerpieceDiv.appendChild( boxDiv );
 
@@ -207,6 +224,7 @@ class PageBuilder {
         otherDiv.appendChild( actionBarDiv );
         otherDiv.appendChild( trayDiv );
 
+        // mainDiv.appendChild( dragUL );
         mainDiv.appendChild( centerpieceDiv );
         mainDiv.appendChild( otherDiv );
 
@@ -284,7 +302,7 @@ class PageBuilder {
         return mainUl;
     };
 
-    getHTML_Setup_Shipshelf(){
+    getHTML_Setup_Shipshelf( height ){
         // <ul class="wide piece-tray debugB">
         //     <li class="block ship-grad" id="block-5"></li>
         //     <li class="block ship-grad" id="block-2"></li>
@@ -293,18 +311,38 @@ class PageBuilder {
         //     <li class="block ship-grad" id="block-3b"></li>
         // </ul>
 
-        const mainUl = this.createElement('ul', 'wide piece-tray' );
-        const ship5li = this.createElement('li', 'block ship-grad' );
-        const ship4li = this.createElement('li', 'block ship-grad' );
-        const ship3ali = this.createElement('li', 'block ship-grad' );
-        const ship3bli = this.createElement('li', 'block ship-grad' );
-        const ship2li = this.createElement('li', 'block ship-grad' );
+        const mainUl = this.createElement('div', 'wide piece-tray drop-box reset' );
+        const ship5li = this.createElement('div', 'block drag ship-grad' );
+        const ship4li = this.createElement('div', 'block drag ship-grad' );
+        const ship3ali = this.createElement('div', 'block drag ship-grad' );
+        const ship3bli = this.createElement('div', 'block drag ship-grad' );
+        const ship2li = this.createElement('div', 'block drag ship-grad' );
 
+        mainUl.id = ID_setup_pieceTray;
         ship5li.id = ID_ship5;
         ship4li.id = ID_ship4;
         ship3ali.id = ID_ship3a;
         ship3bli.id = ID_ship3b;
         ship2li.id = ID_ship2;
+
+        console.log( 'setting height', height );
+
+        ship5li.style.height = height+'px';
+        ship5li.style.width = (height*5)+'px';
+
+        ship4li.style.height = height+'px';
+        ship4li.style.width = (height*4)+'px';
+
+        ship3ali.style.height = height+'px';
+        ship3ali.style.width = (height*3)+'px';
+
+        ship3bli.style.height = height+'px';
+        ship3bli.style.width = (height*3)+'px';
+
+        ship2li.style.height = height+'px';
+        ship2li.style.width = (height*2)+'px';
+
+
 
         mainUl.appendChild( ship5li );
         mainUl.appendChild( ship2li );
@@ -315,11 +353,18 @@ class PageBuilder {
         return mainUl;
     };
 
+    getHeight( html ) {
+        return html.getBoundingClientRect().height;
+    };
+
+    modify_shipSize(){
+
+    };
+
     modify_GraphPaper( html, size ){
         console.log('this registering?');
         // html.style.maskSize = `calc(100% / ${ size } + 1px) calc(100% / ${ size } + 1px)`;
         html.style.maskSize = `calc(100% / ${ size }) calc(100% / ${ size })`;
-
     };
 
     modify_TextSelect( html ){
@@ -363,7 +408,10 @@ class DeepLore {
     get getSetup_Normal(){ return document.getElementById( ID_setup_normal ) };
     get getSetup_Hard(){ return document.getElementById( ID_setup_hard ) };
     get getSetup_GraphPaper(){ return document.getElementById( ID_setup_graphpaper ) };
-
+    get getSetup_PieceTray(){ return document.getElementById( ID_setup_pieceTray ) };
+    get getSetup_GridDrop(){ return document.getElementById( ID_setup_gridDrop ) };
+    get getSetup_FauxShadow(){ return document.getElementById( ID_setup_fauxdrop ) };
+    
 
     get getID_Start_play() { return ID_play };
     get getID_Start_quickgame() { return ID_quickgame };

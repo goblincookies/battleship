@@ -1,5 +1,6 @@
 import './assets/style.css';
 import { PageBuilder, DeepLore } from './assets/modules/HTMLbuilder';
+import { Interaction, Reaction } from './assets/modules/ACTIONmanager';
 
 console.log( 'hello world!' );
 
@@ -26,6 +27,9 @@ const difficulty = {
 
 const pageBuilder = new PageBuilder();
 const deepLore = new DeepLore();
+const reaction = new Reaction();
+
+const interactShipShelf = new Interaction();
 
 const content = document.getElementById( 'content' );
 let actionBar;
@@ -35,13 +39,23 @@ let currentDifficulty = difficulty.NORMAL;
 
 
 function setup(){
-
     // START
     currentPage = page.START;
     loadPage( currentPage );
+    window.addEventListener( 'resize', resizeWindow );
 }
 
-function gridSize( diff ){ return  6 + ( 3 * diff ); }
+function gridSize( diff ){ return  6 + ( 3 * diff ) };
+function shipHeight( fullHeight, diff ){ return  fullHeight / ( 6 + ( 3 * diff ) ) };
+
+function resizeWindow( e ) {
+    // console.log( 'resizing the window here!' );
+    if( currentSubPage == subpage.PLACE ) {
+        let height = pageBuilder.getHeight( deepLore.getSetup_GraphPaper );
+        height = shipHeight( height, currentDifficulty );
+        pageBuilder.modify_shipSize();
+    };
+};
 
 function interact( e ) {
     let newPage = page.UNKOWN;
@@ -192,7 +206,16 @@ function loadSubPage( pageToLoad ) {
                 break;
     
             case subpage.PLACE:
-                actionBar.appendChild( pageBuilder.getHTML_Setup_Shipshelf() );
+                let height = pageBuilder.getHeight( deepLore.getSetup_GraphPaper );
+                height = shipHeight( height, currentDifficulty );
+                actionBar.appendChild( pageBuilder.getHTML_Setup_Shipshelf( height ) );
+                
+                // interactShipShelf.reset( deepLore.getSetup_PieceTray );
+                interactShipShelf.setup( deepLore.getSetup_PieceTray, deepLore.getSetup_FauxShadow );
+                interactShipShelf.update_grid( height );
+                interactShipShelf.watch( deepLore.getSetup_PieceTray );
+                interactShipShelf.watch( deepLore.getSetup_GridDrop );
+
                 break;
                 
             default:
