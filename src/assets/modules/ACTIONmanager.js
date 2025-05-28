@@ -24,6 +24,8 @@ class Interaction {
     pointerStartY = 0;
     pointerOffsetX = 0;
     pointerOffsetY = 0;
+    centerOffsetX = 0;
+    centerOffsetY = 0;
     thePageX = 0;
     thePageY = 0;
     offsetX = 0;
@@ -42,7 +44,7 @@ class Interaction {
         this.trayUl = trayUl;
         console.log('faux', fauxShadow )
         this.fauxShadow = fauxShadow;
-        this.fauxBox = this.fauxShadow.closest( '.drop-box' ).getBoundingClientRect();
+        this.fauxBox = this.fauxShadow.closest( '.drop-box' ); //.getBoundingClientRect();
         console.log( 'faux box', this.fauxBox );
     };
 
@@ -66,6 +68,13 @@ class Interaction {
         this.offsetY = parseFloat( css[ 1 ] );
     }
 
+    shouldSnap( x, y, bounds ){
+        if ( !bounds ) { return false };
+        if ( x < bounds.left || x > bounds.right ) { return false };        
+        if ( y < bounds.top || y > bounds.bottom ) { return false };
+        return true;
+    };
+
     // TRIGGERS WHEN A DRAG IS DETECTED
     dragStart = ( e ) => {
 
@@ -79,9 +88,13 @@ class Interaction {
             this.draggingItem.classList.remove( 'block' );
             this.draggingItem.classList.add( 'dragging' );
 
-            console.log( 'dragging:', this.draggingItem );
             this.pointerStartX = e.clientX || e.touches[0].clientX;
             this.pointerStartY = e.clientY || e.touches[0].clientY;
+
+            let bounds = this.draggingItem.getBoundingClientRect();
+            this.centerOffsetX = e.pageX - bounds.left;
+            this.centerOffsetY = e.pageY - bounds.top;
+
             this.cssToOffset( this.draggingItem.style.transform );
             this.dropboxes = document.querySelectorAll( '.drop-box' );
             this.fauxShadow.classList.remove( 'hidden' );
@@ -96,7 +109,6 @@ class Interaction {
 
     // TRIGGERS WHEN DRAGGING
     drag = ( e ) => {
-
         e.preventDefault();
 
         // PROTECTS AGAINST 'STICKY' DRAGS
@@ -104,6 +116,9 @@ class Interaction {
             this.dragEnd();
             return;
         };
+        
+        // console.log( 'i know snap!', this.snapRes );
+
 
         // VERIFY AN ITEM HAS BEEN FOUND
         if ( this.draggingItem ) {
@@ -121,12 +136,56 @@ class Interaction {
             // CALCULATE THE SNAP
             let snap_x = 0;
             let snap_y = 0;
-
             this.thePageX = e.pageX;
             this.thePageY = e.pageY;
 
+            console.log( 'boxy boxy boxy' )
+            console.log( _y, e.pageY )
+            let bounds = this.fauxBox.getBoundingClientRect();
+            let shipBounds = this.draggingItem.getBoundingClientRect();
+            console.log( bounds.top, bounds.bottom );
+
+
+            if ( this.shouldSnap( e.pageX, e.pageY, bounds ) ) {
+                console.log( 'snap please' );
+                let x_off = e.pageX - _x;
+                _x = e.pageX - bounds.left;
+                _x = Math.floor( _x / this.snapRes );
+                _x = _x * this.snapRes;
+                _x = _x + bounds.left;
+                _x = _x - x_off;
+                _x = _x + this.centerOffsetX;
+
+
+                // let x_off = e.pageX - _x;
+                // _x = e.pageX - bounds.left;
+                // _x = Math.floor( _x / this.snapRes );
+                // _x = _x * this.snapRes;
+                // _x = _x + bounds.left;
+                // _x = _x - x_off;
+
+
+                let y_off = e.pageY - _y;
+                console.log( 'y offset', y_off );
+                _y = e.pageY - bounds.top;
+                _y = Math.floor( _y / this.snapRes );
+                _y = _y * this.snapRes;
+                _y = _y + bounds.top;
+                _y = _y - y_off;
+                _y = _y + this.centerOffsetY;
+
+                console.log( 'new y', _y )
+
+
+            } else {
+                console.log( 'no snap' );
+            }
+            
             this.draggingItem.style.transform = `translate( ${ _x }px, ${ _y }px )`;
-            this.fauxShadow.style.transform = `translate( ${ (_x+10) - this.fauxBox.left }px, ${( _y+10) - this.fauxBox.top }px )`;
+
+            
+
+            // this.fauxShadow.style.transform = `translate( ${ (_x+10) - this.fauxBox.left }px, ${( _y+10) - this.fauxBox.top }px )`;
 
         };
     };
