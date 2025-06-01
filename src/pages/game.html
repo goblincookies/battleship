@@ -6,49 +6,89 @@
     <link rel="stylesheet" href="../assets/style.css">
     <title>Document</title>
 </head>
-<body class="max-height">
-    <div class="absolute behind rad-grad tall wide"></div>
+<body class="">
+    <div class="fixed behind rad-grad tall wide "></div>
 
-    <div class="flex pad-top tall">
+    <div class="center flex-v-center ideal-size" id="content">
+    <!-- <div class="center flex-v-start ideal-size-wide debugA" id="content"> -->
 
-        <div class="center flex-v-center min-height">
-            <div class="title">
+        <div class="flex-v-center title marg-top">
+            <div class="logo-display">
                 <img class="logo-sm shadow" src="../assets/images/logo-plain.png" alt="">
             </div>
-            <div class="button-tray flex-h-center center">
-                <button class="pill pad-sides"> Quit </button>
-                <p>Won: 0 Lost: 0</p>
-                <input type="checkbox" name="hints" id="">
-                <label for="hints"> use hints</label>
-                <!-- <p>use hints</p> -->
-                <!-- <button class="text pad-sides"> Play </button> -->
+            <div class="button-tray wide flex h center-a center">
+                <div class="saftybox flex h center-j wide grow">
+                    <button class="pill pad-sides" id="quick-game"> <p class="glow-pink">Quit </p></button>
+                </div>
+                <div class="saftybox flex h center-j wide grow">
+                    <p class="basic">Your Turn</p>
+                </div>
             </div>
         </div>
 
-        <div class="grow stacker-tray center">
+        <div class="stacker-tray">
 
-            <div class="comp-size centerpiece">
-                <div class="box glow three-dee">
-                    <div class="grid wide tall play-box"></div>
+            <div class="relative comp-size flex v center-j centerpiece">
+                <div class="comp-border overlay"></div>
+                <div class="box glow drop relative">
+                    <ul class="relative drop">
+                        <li class="faux-drop hidden" id="faux-drop"></li>
+                    </ul>
+                    <div class="graph-paper wide tall play-box"></div>
                 </div>
             </div>
 
-            <div class="tray-width tray-height flex-v-center-align debugC">
-                <div class="wide tall grow flex-v-center debugB">
-                    <div class="wide tall status-tray debugA">
-                        <div class="block" id="status-5"></div>
-                        <div class="block" id="status-4"></div>
-                        <div class="block" id="status-2"></div>
-                        <div class="block" id="status-3a"></div>
-                        <div class="block" id="status-3b"></div>
-                    </div>
-                </div>
+            <div class="status-tray flex wrap gap center-j center-a">
+                <div class="status-block" id="status-4"></div>
+                <div class="status-block" id="status-2"></div>
+                <div class="status-block" id="status-3a"></div>
+                <div class="status-block sunk" id="status-5"></div>
+                <div class="status-block" id="status-3b"></div>
             </div>
 
-            <div class="game-size centerpiece">
-                <div class="box glow three-dee">
-                    <div class="grid wide tall play-box"></div>
+            <div class="relative game-size flex v center-j centerpiece">
+                <div class="targets overlay flex v start-j start-a wrap">
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
+                    <div class="target"></div>
                 </div>
+                <div class="box relative">
+                    <div class="graph-paper wide tall play-box"></div>
+                </div>
+                <div class="border overlay glow"></div>
             </div>
 
         </div>

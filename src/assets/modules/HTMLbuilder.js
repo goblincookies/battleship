@@ -42,7 +42,7 @@ class PageBuilder {
         // <div class="centerpiece game-size">
         //     <div class="play-area relative">
         //         <div class="title abs-center">
-        //             <img class="logo-sm shadow" src="./assets/images/logo-plain.png" alt="">
+        //             <img class="logo-lg shadow" src="./assets/images/logo-plain.png" alt="">
         //         </div>
         //         <div class="box glow">
         //             <div class="graph-paper wide tall play-box"></div>
@@ -61,7 +61,7 @@ class PageBuilder {
 
         const mainDiv = this.createElement( 'div', 'centerpiece game-size');
         const playDiv = this.createElement( 'div', 'play-area relative' );
-        const titleDiv = this.createElement( 'div', 'title abs-center' );
+        const titleDiv = this.createElement( 'div', 'abs-center' );
         const logoImg = this.createElement( 'img', 'logo-sm shadow', f_logo );
         const boxDiv = this.createElement( 'div', 'box glow' );
         const graphDiv = this.createElement( 'div', 'graph-paper wide tall play-box' );
@@ -180,15 +180,15 @@ class PageBuilder {
         //     </div>
         // </div>
 
-        const mainDiv = this.createElement( 'div', 'grow stacker-tray center' );
+        const mainDiv = this.createElement( 'div', 'stacker-tray center debugA' );
         // const dragUL = this.createElement('ul', 'absolute wide tall debugA' )
         const centerpieceDiv = this.createElement( 'div', 'game-size flex-v-center centerpiece' );
         const boxDiv = this.createElement( 'div', 'box glow relative');
-        const dropUl = this.createElement( 'div', 'absolute drop drop-box wide tall float' );
+        const dropUl = this.createElement( 'div', 'relative drop'); //absolute drop drop-box wide tall float' );
         const fauxLi = this.createElement( 'div', 'faux-drop hidden' );
         const graphDiv = this.createElement( 'div', 'graph-paper wide tall play-box' );
         const otherDiv = this.createElement( 'div', 'info-size flex-v-center-align debugA' );
-        const actionBarDiv = this.createElement( 'div', 'wide grow flex-v-center min-height' )
+        const actionBarDiv = this.createElement( 'div', 'wide  flex-v-center' ); //'grow min-height'
         const trayDiv = this.createElement( 'div', 'button-tray flex-h-center center' );
         const safetyboxPillDiv = this.createElement( 'div', 'safetybox flex-h-center wide grow' );
         const pillButton = this.createElement( 'button', 'pill pad-sides hidden' );
@@ -311,7 +311,7 @@ class PageBuilder {
         //     <li class="block ship-grad" id="block-3b"></li>
         // </ul>
 
-        const mainUl = this.createElement('div', 'wide piece-tray drop-box reset' );
+        const mainUl = this.createElement('div', 'piece-tray drop-box reset debugA' );
         const ship5li = this.createElement('div', 'ship block drag ship-grad' );
         const ship4li = this.createElement('div', 'ship block drag ship-grad' );
         const ship3ali = this.createElement('div', 'ship block drag ship-grad' );

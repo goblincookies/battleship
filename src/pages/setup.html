@@ -11,83 +11,49 @@
     <div class="fixed behind rad-grad tall wide"></div>
 
 
-    <div class="center flex-v-start ideal-size-wide debugA" id="content">
+    <div class="center flex-v-center ideal-size" id="content">
 
-        <div class="flex-v-center marg-top min-height debugB">
-            <div class="title debugC">
+        <div class="flex-v-center title marg-top">
+            <div class="logo-display">
                 <img class="logo-sm shadow" src="../assets/images/logo-plain.png" alt="">
             </div>
-            <div class="button-tray flex-h-center center debugA">
-                <div class="saftybox flex-h-center wide grow">
+            <div class="button-tray wide flex h center-a center">
+                <div class="saftybox flex h center-j wide grow">
                     <button class="pill pad-sides" id="quick-game"> <p class="glow-pink">Back </p></button>
                 </div>
-                <div class="saftybox flex-h-center wide grow">
-                    <p class="basic">Place your ships<br>tap to rotate</p>
+                <div class="saftybox flex h center-j wide grow">
+                    <p class="basic">Place your ships tap to rotate</p>
                 </div>
             </div>
         </div>
 
-        <div class="grow stacker-tray center debugA">
+        <div class="stacker-tray center">
 
-            <div class="game-size flex-v-center centerpiece debugB">
+            <div class="relative game-size flex v center-j centerpiece">
+                <!-- <div class="border"></div> -->
                 <div class="box glow drop relative">
                     <ul class="relative drop">
                         <li class="faux-drop hidden" id="faux-drop"></li>
-                        <!-- <li class="block ship-grad" id="ship-5"></li> -->
-                        <!-- <li class="block ship-grad" id="ship-2"></li> -->
-                        <!-- <li class="block ship-grad" id="ship-3a"></li> -->
                     </ul>
                     <div class="graph-paper wide tall play-box"></div>
                 </div>
+                <div class="border overlay glow"></div>
+
             </div>
 
-            <div class="info-size flex-v-center-align debugC">
-                <div class="wide grow flex-v-center min-height debugA" id="action-bar">
+            <div class="info-size flex v">
+                <ul class="difficulty grow flex v center-j">
+                    <li><div class="safetybox flex h center-j"><button class="text font-med"><p class="glow-pink">easy</p></button></div></li>
+                    <li><div class="safetybox flex h center-j"><button class="text font-med"><p class="glow-pink">normal</p></button></div></li>
+                    <li><div class="safetybox flex h center-j"><button class="text font-med"><p class="glow-pink">hard</p></button></div></li>
+                </ul>
 
-                    <!-- <ul class="difficulty flex-v-center wide tall">
-                        <li>
-                            <div class="safetybox flex-h-center wide grow debugA">
-                                <button class="text"> <p class="glow-pink">easy</p></button>
-                            </div>
-                        </li>
-                        <li><button class="text"> <p class="glow-pink selected">normal</p></button></li>
-                        <li><button class="text"> <p class="glow-pink">hard</p></button></li>
-                    </ul> -->
-                    <ul class="wide piece-tray debugB">  <!-- flex-v-center -->
-                    <!-- <div class="pad-top wide piece-tray debugC"> -->
-                        <!-- <li class="block ship-grad" id="block-5"></li> -->
-                        <!-- <li class="block ship-grad" id="block-2"></li> -->
-                        <!-- <li class="block ship-grad" id="block-3a"></li> -->
-                        <li class="block ship-grad" id="block-4"></li>
-                        <li class="block ship-grad" id="block-3b"></li>
-
-                        <!-- <div class="shelf" id="block-5"></div> -->
-                        <!-- <div class="shelf" id="block-4">
-                            <div class="block ship-grad" id="">
-                            </div>
-                        </div>
-                        <div class="shelf" id="block-2">
-                            <div class="block ship-grad" id="">
-                            </div>
-                        </div>
-                        <div class="shelf" id="block-3a">
-                            <div class="block ship-grad" id="">
-                            </div>
-                        </div>
-                        <div class="shelf" id="block-3b">
-                            <div class="block ship-grad" id="">
-                            </div>
-                        </div> -->
-                    </ul>
-                     
-                </div>
-
-                <div class="button-tray flex-h-center center">
-                    <div class="saftybox flex-h-center wide grow">
+                <div class="button-tray flex h center-a">
+                    <div class="saftybox flex h center-j wide grow">
                         <button class="pill pad-sides" id="quick-game"> <p class="glow-pink">Random Layout </p></button>
                     </div>
-                    <div class="saftybox flex-h-center wide grow">
-                        <button class="text pad-sides right" id="setup" > <p class="glow-pink">Play</p></button>
+                    <div class="saftybox flex h center-j wide grow">
+                        <button class="text pad-sides right" id="setup" > <p class="glow-pink font-big">Play</p></button>
                     </div>
                 </div>
 
