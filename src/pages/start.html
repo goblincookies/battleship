@@ -6,24 +6,28 @@
     <link rel="stylesheet" href="../assets/style.css">
     <title>Battle Ship</title>
 </head>
-<body class="">
-    <div class="fixed behind rad-grad tall wide "></div>
+<body class="max-height">
+    <div class="fixed behind rad-grad tall wide"></div>
 
-    <div class="center flex v center-j ideal-size tall" id="content">
+    <div class="flex v center-a center-j tall" id="content">
 
         <div class="centerpiece game-size">
-            <div class="play-area relative">
-                <div class="abs-center">
+            <div class="relative game-size flex v center-j centerpiece">
+                 <div class="abs-center">
                     <img class="logo-sm shadow" src="../assets/images/logo-plain.png" alt="">
                 </div>
-                <div class="box glow">
+                <div class="box glow drop relative">
+                    <ul class="relative drop">
+                        <li class="faux-drop hidden" id="faux-drop"></li>
+                    </ul>
                     <div class="graph-paper wide tall play-box"></div>
                 </div>
-            </div>
+                <div class="border overlay"></div>
 
+            </div>
             <div class="button-tray marg-top flex h center-a center">
                 <div class="safetybox flex h center-j wide grow">
-                    <button class="pill pad-sides" id="quick-game"> <p class="glow-pink">Quick Game </p></button>
+                    <button class="pill pad-sides" id="quick-game"> <p class="">Quick Game </p></button>
                 </div>
                 <div class="saftybox flex h center-j wide grow">
                     <button class="text pad-sides right" id="setup" > <p class="glow-pink font-big">Play</p></button>

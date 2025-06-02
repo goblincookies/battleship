@@ -57,10 +57,11 @@ body {
 .wrap { flex-wrap: wrap; }
 .gap { gap: 0.1rem; }
 .min-height { height: min-content; }
-.ideal-size-wide {
+.max-height { height: 100vh; }
+/* .ideal-size-wide {
     width: max(750px, 80%);
     height: 100%;
-}
+} */
 .relative{ position: relative; }
 .rad-grad{ background: radial-gradient(circle, var(--dark) 15%,var(--black) 90%); }
 .absolute{ position: absolute; }
@@ -108,7 +109,8 @@ body {
     width: min(100%, 60vw);
     max-width: 30vw;
 }
-
+.pad { padding: 2rem; }
+.marg { margin: 2rem; }
 .marg-top{ margin-top: 1rem; }
 .pad-top{ padding-top: 2rem; }
 .pad-bot{ padding-bottom: 2rem; }
@@ -179,36 +181,43 @@ body {
     width: 100%;
     height: 100%;
 }
-.border{
+.comp-border{
     /* z-index: 10; */
-    /* outline: 8px solid yellow; */
-    /* background-color: transparent; */
+    background-clip: padding-box;
+    border: 4px solid transparent;
+    border-image: -webkit-linear-gradient( 0deg, var(--pink),var(--blue)) 20 stretch;
+}
+.border{
     background-clip: padding-box;
     border: 8px solid transparent;
     border-image: -webkit-linear-gradient( 0deg, var(--pink),var(--blue)) 20 stretch;
+}
+.border-status{
+    border: 8px solid red;
 }
 .targets{
     z-index: 2;
     padding: 8px;
 }
 .target{
+    /* border: 1px solid black; */
     background-color:transparent;
     aspect-ratio: 1;
     width: calc(100%/6);
 }
 .target:hover{
     background-color: black;
-    border: 4px solid white;
+    border: 3px solid white;
     filter: drop-shadow( 0px 0px 3px var(--green) )
     drop-shadow( 0px 0px 25px var(--green) );
+}
+.target:active{
+    background-color: white;
+    /* border: 5px solid black; */
+    filter: drop-shadow( 0px 0px 3px var(--green) )
+    drop-shadow( 0px 0px 25px var(--green) );
+}
 
-}
-.comp-border{
-    z-index: 10;
-    background-clip: padding-box;
-    border: 4px solid transparent;
-    border-image: -webkit-linear-gradient( 0deg, var(--pink),var(--blue)) 20 stretch;
-}
 
 button{
     cursor: pointer;
@@ -226,10 +235,11 @@ button{
     align-items: center;
 }
 button.pill {
+    z-index: 10;
     font-weight: 400;
     color: var(--light);
     white-space: nowrap;
-    background-color: transparent;
+    background-color: black;
     border: 1px solid var(--light);
     border-radius: 100px;
     font-size: 1rem;
@@ -403,8 +413,9 @@ button.text:hover {
 
 }
 .glow{
-    /* filter: drop-shadow( 0px 0px 15px var(--light) ); */
-    box-shadow: 0px 0px 40px 15px var(--dark);
+    /* box-shadow: 0px 0px 40px 5px var(--dark); */
+    filter: drop-shadow( 0px 0px 4px white ) drop-shadow( 0px 0px 40px var(--dark) );
+
 }
 .shadow{
     filter: drop-shadow( 0px 0px 10px var(--black) ) drop-shadow( 0px 0px 20px var(--black) );
@@ -418,13 +429,9 @@ button.text:hover {
     min-height: 12vh;
 }
 .logo-sm {
-    /* width: min(50%, 700px); */
-    /* aspect-ratio: 1; */
-    height: 100%;
+    height: 90%;
     width: 100%;
     object-fit: contain;
-    /* max-width: 100%; */
-    /* width: min(50%, 700px); */
 }
 .min-width { width:min-content; }
 .persepective{
