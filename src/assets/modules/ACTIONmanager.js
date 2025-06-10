@@ -31,6 +31,8 @@ class Interaction {
     offsetX = 0;
     offsetY = 0;
     snapRes = 90;
+    rotateSensativity = 15;
+    rotateTimer = 0;
     // maxSlide = 0;
 
     constructor( ) { 
@@ -57,14 +59,20 @@ class Interaction {
     cssToOffset( css ){
         if ( !css ){ return };
         css = css.split(',');
-        css[ 0 ] = css[ 0 ].replace(/[^0-9-\.]+/g,'')
-        css[ 1 ] = css[ 1 ].replace(/[^0-9-\.]+/g,'')
+        css[ 0 ] = css[ 0 ].replace(/[^0-9-\.]+/g,'');
+        css[ 1 ] = css[ 1 ].replace(/[^0-9-\.]+/g,'');
 
         this.offsetX = parseFloat( css[ 0 ] );
         this.offsetY = parseFloat( css[ 1 ] );
+    };
+
+    cssToFloat( css ){
+        css = css.replace(/[^0-9-\.]+/g,'');
+        return css;
     }
 
     shouldSnap( x, y, bounds ){
+        if ( this.draggingItem.parentNode == this.fauxBox ) { return true };
         if ( !bounds ) { return false };
         if ( x < bounds.left || x > bounds.right ) { return false };        
         if ( y < bounds.top || y > bounds.bottom ) { return false };
@@ -93,8 +101,12 @@ class Interaction {
             this.pointerStartY = e.clientY || e.touches[0].clientY;
 
             let bounds = this.draggingItem.getBoundingClientRect();
-            this.centerOffsetX = e.pageX - bounds.left;
-            this.centerOffsetY = e.pageY - bounds.top;
+            
+            
+            let offsetX = e.pageX || e.touches[0].pageX;
+            let offsetY = e.pageY || e.touches[0].pageY;
+            this.centerOffsetX = offsetX - bounds.left;
+            this.centerOffsetY = offsetY - bounds.top;
 
             this.cssToOffset( this.draggingItem.style.transform );
             this.dropboxes = document.querySelectorAll( '.drop-box' );
@@ -114,13 +126,23 @@ class Interaction {
 
         // PROTECTS AGAINST 'STICKY' DRAGS
         if ( e.buttons < 1 ) {
+            console.log( 'sticky' );
+            this.dragEnd();
+            return;
+        };
+
+        // // THIS IS NULLIFYING THE TOUCH INPUT
+        // // CHECK IF OUTSIDE THE BOUNDS OF THE WINDOW
+        if ( ( !e.clientX || !e.clientY ) && ( !e.touches )  ) {
+            console.log( 'outside bounds' )
+            console.log( !e.clientX )
+            console.log( !e.clientY )
             this.dragEnd();
             return;
         };
 
         // VERIFY AN ITEM HAS BEEN FOUND
         if ( this.draggingItem ) {
-
             // CALC THE MOUSE MOVEMENT
             const clientX = e.clientX || e.touches[0].clientX;
             const clientY = e.clientY || e.touches[0].clientY;
@@ -128,51 +150,65 @@ class Interaction {
             let _x = this.offsetX + clientX - this.pointerStartX;
             let _y = this.offsetY + clientY - this.pointerStartY;
 
+            console.log( 'checking starting values:', _x, _y );
+
+
             this.pointerOffsetX = _x;
             this.pointerOffsetY = _y;
 
             // CALCULATE THE SNAP
             let snap_x = 0;
             let snap_y = 0;
-            this.thePageX = e.pageX;
-            this.thePageY = e.pageY;
+            this.thePageX = e.pageX || e.touches[0].pageX;
+            this.thePageY = e.pageY || e.touches[0].pageY;
 
-            console.log( 'boxy boxy boxy' )
-            console.log( _y, e.pageY )
+            console.log( 'checking pagepos:', this.thePageX, this.thePageY );
+
             let bounds = this.fauxBox.getBoundingClientRect();
             let shipBounds = this.draggingItem.getBoundingClientRect();
             console.log( bounds.top, bounds.bottom );
 
 
             if ( this.shouldSnap( e.pageX, e.pageY, bounds ) ) {
+
                 console.log( 'snap please' );
-                let x_off = e.pageX - _x;
-                _x = e.pageX - bounds.left;
+                let x_off = this.thePageX - _x;
+                _x = this.thePageX - bounds.left;
                 _x = Math.floor( _x / this.snapRes );
+                _x = Math.max( 0, _x );
+                let _width = this.cssToFloat( this.draggingItem.style.width );
+                _x = Math.min( Math.floor( ( bounds.width - _width ) / this.snapRes) , _x );
+                
                 _x = _x * this.snapRes;
                 _x = _x + bounds.left;
                 _x = _x - x_off;
                 _x = _x + this.centerOffsetX;
+                console.log( '>>>>x', _x );
 
-
-                let y_off = e.pageY - _y;
+                let y_off = this.thePageY - _y;
                 console.log( 'y offset', y_off );
-                _y = e.pageY - bounds.top;
+                _y = this.thePageY - bounds.top;
                 _y = Math.floor( _y / this.snapRes );
+                _y = Math.max( 0, _y );
+                let _height = this.cssToFloat( this.draggingItem.style.height );
+                _y = Math.min( Math.floor( ( bounds.width - _height ) / this.snapRes ), _y );
+
                 _y = _y * this.snapRes;
                 _y = _y + bounds.top;
                 _y = _y - y_off;
                 _y = _y + this.centerOffsetY;
 
-                console.log( 'new y', _y )
-
-
             } else {
                 console.log( 'no snap' );
             }
+
+            console.log( 'checking in', _x, _y );
             
             this.draggingItem.style.transform = `translate( ${ _x }px, ${ _y }px )`;
         };
+
+        if( this.rotateTimer <= this.rotateSensativity){ this.rotateTimer += 1 };
+        
     };
 
     // TRIGGERS WHEN DRAG IS COMPLETE OR A BUNCH OF WAYS
@@ -185,8 +221,12 @@ class Interaction {
             this.draggingItem.classList.remove( 'dragging' );
 
             // WHICH DROP BOX?
-            let _x = this.thePageX;
-            let _y = this.thePageY;
+            // let _x = this.thePageX;
+            // let _y = this.thePageY;
+
+            let _x = this.draggingItem.getBoundingClientRect().left;
+            let _y = this.draggingItem.getBoundingClientRect().top;
+
 
             console.log( 'dropped, x & y:', _x, _y )
             let droppedHere = null;
@@ -241,13 +281,34 @@ class Interaction {
                     // MAKE IT A CHILD 
                     droppedHere.prepend( this.draggingItem );
                 };
+
+                if( this.draggingItem.parentNode == this.fauxBox ) {
+
+                    console.log( 'rotate timer check: ', this.rotateTimer );
+
+                    // IF WE HAVEN'T TIMED OUT
+                    if( this.rotateTimer < this.rotateSensativity){
+                        // ROTATE
+                        let itemBounds = this.draggingItem.getBoundingClientRect();
+                        this.draggingItem.style.width = `${ itemBounds.height }px`;
+                        this.draggingItem.style.height = `${ itemBounds.width }px`;
+                    };
+
+                };
+
             } else {
                 // IF PARENT IS FAUXBOX ROTATE
                 if( this.draggingItem.parentNode == this.fauxBox ) {
-                    // ROTATE
-                    let itemBounds = this.draggingItem.getBoundingClientRect();
-                    this.draggingItem.style.width = `${ itemBounds.height }px`;
-                    this.draggingItem.style.height = `${ itemBounds.width }px`;
+
+                    console.log( 'rotate timer check: ', this.rotateTimer );
+
+                    // IF WE HAVEN'T TIMED OUT
+                    if( this.rotateTimer < this.rotateSensativity){
+                        // ROTATE
+                        let itemBounds = this.draggingItem.getBoundingClientRect();
+                        this.draggingItem.style.width = `${ itemBounds.height }px`;
+                        this.draggingItem.style.height = `${ itemBounds.width }px`;
+                    };
 
                 } else {
                     
@@ -287,6 +348,7 @@ class Interaction {
         this.offsetY = 0;
         this.thePageX = 0;
         this.thePageY = 0;
+        this.rotateTimer = 0;
     };
 
     // RESETS OFFSET AND TRANSFORM

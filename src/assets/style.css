@@ -419,6 +419,9 @@ button.text:hover {
 .ship-grad{
     background-image: linear-gradient(to right, yellow, blue, red, green);
     background-size: 100vw 100vh;
+    /* >>> USE THIS FOR ERROR DISPLAY >>> */
+    /* mask: linear-gradient( 90deg, white 0%, transparent 100%); */
+    /* >>> USE THIS FOR ERROR DISPLAY >>> */
 }
 .graph-paper {
     background-image: linear-gradient(to right, var(--pink), var(--blue));
