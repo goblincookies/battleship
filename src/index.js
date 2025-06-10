@@ -158,8 +158,9 @@ function loadPage( pageToLoad ){
     switch( pageToLoad ) {
         case page.START:
             console.log( 'loading start page!')
-            pageBuilder.modify_ContentCenter( content );
-            pageBuilder.modify_ContentNarrow( content );
+
+            // pageBuilder.modify_ContentCenter( content );
+            // pageBuilder.modify_ContentNarrow( content );
 
             content.appendChild( pageBuilder.getHTML_Start() );
             deepLore.getStart_Play.addEventListener( 'click', interact );
@@ -199,7 +200,7 @@ function loadSubPage( pageToLoad ) {
 
     if( actionBar ){
         actionBar.textContent='';
-        
+        deepLore.getSetup_GridDrop.textContent = '';
         switch( pageToLoad ) {
     
             case subpage.DIFFICULTY:
@@ -216,7 +217,7 @@ function loadSubPage( pageToLoad ) {
                 actionBar.appendChild( pageBuilder.getHTML_Setup_Shipshelf( height ) );
                 
                 // interactShipShelf.reset( deepLore.getSetup_PieceTray );
-                interactShipShelf.setup( deepLore.getSetup_PieceTray, deepLore.getSetup_FauxShadow );
+                interactShipShelf.setup( deepLore.getSetup_PieceTray, deepLore.getSetup_GridDrop );
                 interactShipShelf.update_grid( height );
                 interactShipShelf.watch( deepLore.getSetup_PieceTray );
                 interactShipShelf.watch( deepLore.getSetup_GridDrop );

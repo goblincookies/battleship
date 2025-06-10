@@ -13,7 +13,7 @@ class Reaction {
 };
 
 class Interaction {
-    fauxShadow = null;
+    // fauxShadow = null;
     fauxBox = null;
     trayUl = null;
     draggingItem = null;
@@ -40,12 +40,10 @@ class Interaction {
         // GET FAUX BOX
     };
 
-    setup( trayUl, fauxShadow ) {
+    setup( trayUl, fauxBox ) {
         this.trayUl = trayUl;
-        console.log('faux', fauxShadow )
-        this.fauxShadow = fauxShadow;
-        this.fauxBox = this.fauxShadow.closest( '.drop-box' ); //.getBoundingClientRect();
-        console.log( 'faux box', this.fauxBox );
+        this.fauxBox = fauxBox;
+        console.log('faux box', this.fauxBox );
     };
 
     update_grid ( snapRes ){ this.snapRes = snapRes; }
@@ -58,8 +56,6 @@ class Interaction {
 
     cssToOffset( css ){
         if ( !css ){ return };
-        
-
         css = css.split(',');
         css[ 0 ] = css[ 0 ].replace(/[^0-9-\.]+/g,'')
         css[ 1 ] = css[ 1 ].replace(/[^0-9-\.]+/g,'')
@@ -78,11 +74,16 @@ class Interaction {
     // TRIGGERS WHEN A DRAG IS DETECTED
     dragStart = ( e ) => {
 
+        console.log( 'registering drag start' );
+
+
         e.preventDefault();
 
         // MAKE SURE IT'S A VIABLE ITEM; THIS IS USEFUL
         // FOR DISABLING DRAGGING ON CERTAIN ITEMS
         if ( e.target.classList.contains( 'drag') ) {
+
+            console.log( 'drag starting here' );
 
             this.draggingItem = e.target;
             this.draggingItem.classList.remove( 'block' );
@@ -116,9 +117,6 @@ class Interaction {
             this.dragEnd();
             return;
         };
-        
-        // console.log( 'i know snap!', this.snapRes );
-
 
         // VERIFY AN ITEM HAS BEEN FOUND
         if ( this.draggingItem ) {
@@ -157,14 +155,6 @@ class Interaction {
                 _x = _x + this.centerOffsetX;
 
 
-                // let x_off = e.pageX - _x;
-                // _x = e.pageX - bounds.left;
-                // _x = Math.floor( _x / this.snapRes );
-                // _x = _x * this.snapRes;
-                // _x = _x + bounds.left;
-                // _x = _x - x_off;
-
-
                 let y_off = e.pageY - _y;
                 console.log( 'y offset', y_off );
                 _y = e.pageY - bounds.top;
@@ -182,11 +172,6 @@ class Interaction {
             }
             
             this.draggingItem.style.transform = `translate( ${ _x }px, ${ _y }px )`;
-
-            
-
-            // this.fauxShadow.style.transform = `translate( ${ (_x+10) - this.fauxBox.left }px, ${( _y+10) - this.fauxBox.top }px )`;
-
         };
     };
 
@@ -257,22 +242,28 @@ class Interaction {
                     droppedHere.prepend( this.draggingItem );
                 };
             } else {
-                // REMOVE THE TRANSFORM
-                this.draggingItem.style.transform = '';
-                this.draggingItem.classList.add( 'block' );
+                // IF PARENT IS FAUXBOX ROTATE
+                if( this.draggingItem.parentNode == this.fauxBox ) {
+                    // ROTATE
+                    let itemBounds = this.draggingItem.getBoundingClientRect();
+                    this.draggingItem.style.width = `${ itemBounds.height }px`;
+                    this.draggingItem.style.height = `${ itemBounds.width }px`;
 
-                // MAKE IT A CHILD 
-                this.trayUl.prepend( this.draggingItem );            
+                } else {
+                    
+                    // ELSE
+                    // REMOVE THE TRANSFORM
+                    this.draggingItem.style.transform = '';
+                    this.draggingItem.classList.add( 'block' );
+    
+                    // MAKE IT A CHILD 
+                    this.trayUl.prepend( this.draggingItem );            
+                }
+
             };
-
-            
-            
-            this.fauxShadow.classList.add( 'hidden' );
 
         }
 
-
-        
         this.removeListeners();
         this.cleanup();
     };
@@ -294,6 +285,8 @@ class Interaction {
         this.draggingItem = null;
         this.offsetX = 0;
         this.offsetY = 0;
+        this.thePageX = 0;
+        this.thePageY = 0;
     };
 
     // RESETS OFFSET AND TRANSFORM
