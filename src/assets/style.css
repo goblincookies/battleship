@@ -20,6 +20,9 @@
     --pink : #fca2ff;
     --blue : #93eff3;
     --green : #0ec72c;
+    /* --hit : #b81553; */
+    --hit : #ff00627e;
+    --ship : #11f3d5a9;
 
     --light : #dcdcdc;
 
@@ -110,6 +113,8 @@ body {
     max-width: 30vw;
 }
 .pad { padding: 2rem; }
+.padbox { padding: 8px; }
+.padbox-comp{ padding: 2px; }
 .marg { margin: 2rem; }
 .marg-top{ margin-top: 1rem; }
 .pad-top{ padding-top: 2rem; }
@@ -118,6 +123,7 @@ body {
     padding-left: 1rem;
     padding-right: 1rem;
 }
+
 .flex{ display: flex; }
 .v{ flex-direction: column; }
 .h{ flex-direction: row; }
@@ -125,52 +131,15 @@ body {
 .center-a { align-items: center; }
 .start-j { justify-content: start; }
 .start-a { align-items: start; }
-
 .between { justify-content:space-between; }
-/* .flex{ */
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* justify-content: stretch; */
-    /* align-items: stretch; */
-/* } */
-.flex-v-center{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
 }
-.flex-v-center-align{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-}
-.flex-v-start{
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    /* align-items: start; */
-}
-.flex-v-bot{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-}
-.flex-h-center{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* gap: max(2rem, 30%); */
-}
-.flex-h-end{
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-.flex-v-center-spread {
-    display: ;
-}
+
+
 .button-tray{
     height: 5vw;
     min-height: 8vh;
@@ -184,8 +153,14 @@ body {
 .comp-border{
     /* z-index: 10; */
     background-clip: padding-box;
-    border: 4px solid transparent;
+    border: 2px solid transparent;
     border-image: -webkit-linear-gradient( 0deg, var(--pink),var(--blue)) 20 stretch;
+}
+.outline{
+    border: 4px solid transparent;
+    background-clip: padding-box;
+    /* background-color: var(--dark); */
+    /* border: 2px solid black; */
 }
 .border{
     background-clip: padding-box;
@@ -197,7 +172,8 @@ body {
 }
 .targets{
     z-index: 2;
-    padding: 8px;
+    /* WHY NOT FULL? */
+    /* padding: 7.8px; */
 }
 .target{
     /* border: 1px solid black; */
@@ -205,6 +181,24 @@ body {
     aspect-ratio: 1;
     width: calc(100%/6);
 }
+.target.miss {
+    border: 8px solid transparent;
+    background-clip: padding-box;
+    background-color: var(--dark);
+}
+.target.hit {
+    border: 1px solid white;
+    /* background-clip: padding-box; */
+    background-color: var(--hit);
+    /* background-image: radial-gradient(transparent 0%, var(--pink) 50%, transparent 55%); */
+    filter: drop-shadow( 0px 0px 3px var(--hit) )
+    drop-shadow( 0px 0px 25px var(--hit) );
+    /* animation: hit 1s linear 1s forwards; */
+}
+.target.ship {
+    background-color: var(--ship);
+}
+
 .target:hover{
     background-color: black;
     border: 3px solid white;
@@ -315,7 +309,31 @@ button.text:hover {
 #gra5{
     width: calc(90px*5);
 }
-
+#ship-5{
+    background-color: var(--ship);
+    grid-row: 1;
+    grid-column: 2/ span 5;
+}
+#ship-4{
+    background-color: var(--ship);
+    grid-column: 1;
+    grid-row: 3/ span 4;
+}
+#ship-3a{
+    background-color: var(--ship);
+    grid-column: 3;
+    grid-row: 2/ span 3;
+}
+#ship-3b{
+    background-color: var(--ship);
+    grid-row: 5;
+    grid-column: 3/ span 3;
+}
+#ship-2{
+    background-color: var(--ship);
+    grid-row: 6;
+    grid-column: 5/ span 2;
+}
 #status-5{
     background-size: 100% 21%;
     height: calc( var(--height-w) * 5);
@@ -344,7 +362,7 @@ button.text:hover {
 .sunk{
     background-image: linear-gradient(135deg, #000000 25%, #4d4d4d 25%, #4d4d4d 50%, #000000 50%, #000000 75%, #4d4d4d 75%, #4d4d4d 100%) !important;
     background-size: 20px 20px !important;
-    /* background-repeat: repeat !important; */
+    animation: sunk 2s linear infinite;
 }
 .shelf{
     position: relative;
@@ -378,6 +396,7 @@ button.text:hover {
     border: 2px solid #000;
     width: 50%;
 }
+
 .block{
     z-index: 3;
     position: relative;
@@ -402,8 +421,18 @@ button.text:hover {
     mask-repeat:repeat;
     background-blend-mode:multiply;
 }
+.comp-graph-paper {
+    background-image: linear-gradient(to right, var(--pink), var(--blue));
+    mask:
+        linear-gradient(to right, white 1px, transparent 1px),
+        linear-gradient(to bottom, white 1px, transparent 1px);
+    mask-size: calc(100%/6) calc(100% / 6);
+    mask-position: -1px -1px;
+    mask-repeat:repeat;
+    background-blend-mode:multiply;
+}
 .box{
-    padding: 8px;
+    /* padding: 8px; */
     aspect-ratio: 1;
     width: auto;
     height: 100%;
@@ -414,7 +443,7 @@ button.text:hover {
 }
 .glow{
     /* box-shadow: 0px 0px 40px 5px var(--dark); */
-    filter: drop-shadow( 0px 0px 4px white ) drop-shadow( 0px 0px 40px var(--dark) );
+    filter: drop-shadow( 0px 0px 10px white ) drop-shadow( 0px 0px 40px var(--dark) );
 
 }
 .shadow{
@@ -520,10 +549,10 @@ button.text:hover {
         width: fit-content;
     }
     .status-block{
-        background-image: linear-gradient(to right, #000 2px, #db59bf 2px);
+        background-image: linear-gradient(to right, #000 1px, #db59bf 1px);
     }
     #status-5{
-        background-size: 21% 100%;
+        background-size: 20% 100%;
         height: 50%;
         min-height: 50%;
         width: calc( var(--height-w) * 5);
@@ -537,21 +566,21 @@ button.text:hover {
         min-width: calc( var(--height-h) * 4);
     }
     #status-2{
-        background-size: 51% 100%;
+        background-size: 50% 100%;
         height: 50%;
         min-height: 50%;
         width: calc( var(--height-w) * 2);
         min-width: calc( var(--height-h) * 2);
     }
     #status-3a{
-        background-size: 35% 100%;
+        background-size: 33% 100%;
         height: 50%;
         min-height: 50%;
         width: calc( var(--height-w) * 3);
         min-width: calc( var(--height-h) * 3);
     }
     #status-3b{
-        background-size: 35% 100%;
+        background-size: 33% 100%;
         height: 50%;
         min-height: 50%;
         width: calc( var(--height-w) * 3);
@@ -575,3 +604,23 @@ button.text:hover {
         background-color: red;
     }
 }
+
+@keyframes sunk {
+    0% {
+        background-position: 0px 0px;
+    }
+    100% {
+        background-position: 0px 20px;
+    }
+}
+/* @keyframes hit {
+    0% {
+        background-size: 100% 100%;
+        background-position: 0 0;
+    }
+    100%{
+        background-size: 200% 200%;
+        background-position: 50% 50%;
+
+    }
+} */
