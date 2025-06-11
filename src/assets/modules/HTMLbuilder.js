@@ -12,14 +12,18 @@ const ID_setup_easy = 'easy';
 const ID_setup_normal = 'normal';
 const ID_setup_hard = 'hard';
 const ID_setup_graphpaper = 'graph-paper';
-const ID_ship5 = 'ship-5';
-const ID_ship4 = 'ship-4';
-const ID_ship3a = 'ship-3a';
-const ID_ship3b = 'ship-3b';
-const ID_ship2 = 'ship-2';
+
+// const ID_ship5 = 'ship-5';
+// const ID_ship4 = 'ship-4';
+// const ID_ship3a = 'ship-3a';
+// const ID_ship3b = 'ship-3b';
+// const ID_ship2 = 'ship-2';
+
 const ID_setup_fauxdrop = 'faux-drop';
 const ID_setup_pieceTray = 'piece-tray';
 const ID_setup_gridDrop = 'grid-drop';
+const ID_game_quit = 'game-quit';
+const ID_game_textFeedback = 'game-feedback';
 
 
 
@@ -312,45 +316,210 @@ class PageBuilder {
         // </ul>
 
         const mainUl = this.createElement('div', 'piece-tray drop-box reset debugA' );
-        const ship5li = this.createElement('div', 'ship block drag ship-grad' );
-        const ship4li = this.createElement('div', 'ship block drag ship-grad' );
-        const ship3ali = this.createElement('div', 'ship block drag ship-grad' );
-        const ship3bli = this.createElement('div', 'ship block drag ship-grad' );
-        const ship2li = this.createElement('div', 'ship block drag ship-grad' );
+        
+        for ( let n = 0; n < 5; n++ ) {
+            let ship = this.createElement('div', 'ship block drag ship-grad' );
+            ship.id = `ship-${n}`;
+            ship.style.height = height+'px';
+
+            if( n < 1 ){
+                ship.style.width = (height*3)+'px';
+            } else {
+                ship.style.width = (height * ( n + 1 ) )+'px';
+            }
+            mainUl.appendChild( ship );
+        };
 
         mainUl.id = ID_setup_pieceTray;
-        ship5li.id = ID_ship5;
-        ship4li.id = ID_ship4;
-        ship3ali.id = ID_ship3a;
-        ship3bli.id = ID_ship3b;
-        ship2li.id = ID_ship2;
-
-        console.log( 'setting height', height );
-
-        ship5li.style.height = height+'px';
-        ship5li.style.width = (height*5)+'px';
-
-        ship4li.style.height = height+'px';
-        ship4li.style.width = (height*4)+'px';
-
-        ship3ali.style.height = height+'px';
-        ship3ali.style.width = (height*3)+'px';
-
-        ship3bli.style.height = height+'px';
-        ship3bli.style.width = (height*3)+'px';
-
-        ship2li.style.height = height+'px';
-        ship2li.style.width = (height*2)+'px';
-
-
-
-        mainUl.appendChild( ship5li );
-        mainUl.appendChild( ship2li );
-        mainUl.appendChild( ship3ali );
-        mainUl.appendChild( ship4li );
-        mainUl.appendChild( ship3bli );
-
         return mainUl;
+    };
+
+    getHTML_Game_Title(){
+        // <div class="flex v title marg-top">
+        //     <div class="logo-display">
+        //         <img class="logo-sm shadow" src="../assets/images/logo-plain.png" alt="">
+        //     </div>
+        //     <div class="button-tray wide flex h center-a center">
+        //         <div class="saftybox flex h center-j wide grow">
+        //             <button class="pill pad-sides" id="quick-game"> <p class="">Quit </p></button>
+        //         </div>
+        //         <div class="saftybox flex h center-j wide grow">
+        //             <p class="basic">Your Turn</p>
+        //         </div>
+        //     </div>
+        // </div>
+
+        const mainDiv = this.createElement( 'div', 'flex v title marg-top' );
+        const logoDiv = this.createElement( 'div', 'logo-display' );
+        const logoImg = this.createElement( 'img', 'logo-sm shadow', f_logo );
+        const trayDiv = this.createElement( 'div', 'button-tray wide flex h center-a center' );
+        const pillDiv = this.createElement( 'div', 'safetybox flex h center-j wide grow' );
+        const pillButton = this.createElement( 'button', 'pill pad-sides' );
+        const pillP = this.createElement( 'p', '' );
+        const textDiv = this.createElement( 'div', 'safetybox flex h center-j wide grow' );
+        const textP = this.createElement( 'p', 'basic' );
+
+        pillButton.id = ID_game_quit;
+        textP.id = ID_game_textFeedback;
+
+        pillP.textContent = 'Quit';
+        textP.textContent = 'Your Turn';
+
+        pillButton.appendChild( pillP );
+        pillDiv.appendChild( pillButton );
+        textDiv.appendChild( textP );
+
+        trayDiv.appendChild( pillDiv );
+        trayDiv.appendChild( textDiv );
+
+        logoDiv.appendChild( logoImg );
+        mainDiv.appendChild( logoDiv );
+        mainDiv.appendChild( trayDiv );
+
+        return mainDiv;
+    };
+
+    getHTML_Game_Main( graphpapersize ){
+
+        // <div class="stacker-tray">
+
+        // COMPUTER DISPLAY
+        
+        // STATUS TRAY
+
+        // PLAYER DISPLAY
+
+        // </div>
+        console.log( 'game graph size--->', graphpapersize );
+        const mainDiv = this.createElement( 'div', 'stacker-tray' );
+        mainDiv.appendChild( this.getHTML_Game_Comp( graphpapersize ) );
+        mainDiv.appendChild( this.getHTML_Game_Tray( ) );
+        mainDiv.appendChild( this.getHTML_Game_Player( graphpapersize ) );
+
+        return mainDiv;
+    };
+
+    getHTML_Game_Comp( graphpapersize ){
+
+        //     <div class="relative comp-size flex v center-j centerpiece">
+        //         <div class="targets padbox-comp overlay flex v start-j start-a wrap">
+
+        //             <<<<<<< ( *targetCount ) >>>>>>> 
+        //             <div class="target" id="c-00"></div>
+        //             <<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>
+
+        //         </div>
+        //         <div class="box padbox-comp drop relative">
+        //             <div class="comp-graph-paper wide tall"></div>
+        //         </div>
+        //         <div class="ships padbox-comp overlay">
+        //             <div class="grid wide tall">
+
+        //                  <<<<<<<<<<<< ( *5 ) >>>>>>>>>>>> 
+        //                  <div class="outline" id="ship-n"></div>
+        //                  <<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>
+
+        //             </div>
+        //         </div>
+        //         <div class="comp-border overlay"></div>
+        //     </div>
+
+        const compDiv = this.createElement( 'div', 'relative comp-size flex v center-j centerpiece' );
+        const targetsDiv = this.createElement( 'div', 'targets padbox-comp overlay flex v start-j start-a wrap' );
+
+        for ( let n = 0; n < graphpapersize * graphpapersize; n++ ) {
+            let target = this.createElement( 'div', 'target' );
+            target.style.width = `calc(100%/${graphpapersize})`;
+            target.id = `c-${n}`;
+            targetsDiv.appendChild( target );
+        };
+
+        const boxDiv = this.createElement( 'div', 'box padbox-comp drop relative' );
+        const graphDiv = this.createElement( 'div', 'comp-graph-paper wide tall' );
+        const shipsDiv = this.createElement( 'div', 'ships padbox-comp overlay' );
+        const gridDiv = this.createElement( 'div', 'grid wide tall' );
+        for ( let n = 0; n < 5; n++ ) {
+            let status = this.createElement( 'div', 'outline' );
+            status.id = `ship-${n}`;
+            gridDiv.appendChild( status );
+        };
+        const borderDiv = this.createElement( 'div', 'comp-border overlay' );
+
+        shipsDiv.appendChild( gridDiv );
+        boxDiv.appendChild( graphDiv );
+        compDiv.appendChild( targetsDiv );
+        compDiv.appendChild( boxDiv );
+        compDiv.appendChild( shipsDiv );
+        compDiv.appendChild( borderDiv );
+
+        gridDiv.style.gridTemplateColumns = `repeat(${graphpapersize}, 1fr)`;
+        gridDiv.style.gridTemplateRows = `repeat(${graphpapersize}, 1fr)`;
+
+        this.modify_GraphPaper( graphDiv, graphpapersize );
+        return compDiv;
+    };
+
+    getHTML_Game_Tray(){
+
+        //     <div class="status-tray flex wrap gap center-j center-a">
+
+        //          <<<<<<<<<<<< ( *5 ) >>>>>>>>>>>> 
+        //          <div class="status-block" id="status-n"></div>
+        //          <<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>
+
+        //     </div>
+
+        const statusTrayDiv = this.createElement( 'div', 'status-tray flex wrap gap center-j center-a' );
+
+        for ( let n = 0; n < 5; n++ ) {
+            let status = this.createElement( 'div', 'status-block' );
+            status.id = `status-${n}`;
+            statusTrayDiv.appendChild( status );
+        };        
+        return statusTrayDiv;
+    };
+
+    getHTML_Game_Player( graphpapersize ){
+        //     <div class="relative game-size flex v center-j centerpiece">
+        //         <div class="targets padbox overlay flex v start-j start-a wrap">
+        // 
+        //             <<<<<<< ( *targetCount ) >>>>>>> 
+        //             <div class="target" id="p-00"></div>
+        //             <<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>
+        // 
+        //         </div>
+        //         <div class="box padbox relative glow">
+        //             <div class="graph-paper wide tall"></div>
+        //         </div>
+        //         <div class="border overlay"></div>
+        //     </div>
+        const playerDiv = this.createElement( 'div', 'relative game-size flex v center-j centerpiece' );
+        const targetsDiv = this.createElement( 'div', 'targets padbox overlay flex v start-j start-a wrap' );
+
+        console.log( 'adding targets:', (graphpapersize * graphpapersize) );
+        console.log( 'graph size:', graphpapersize );
+
+        for ( let n = 0; n < ( graphpapersize * graphpapersize ); n++ ) {
+            const target = this.createElement( 'div', 'target' );
+            target.style.width = `calc(100%/${graphpapersize})`;
+            target.id = `p-${n}`;
+            targetsDiv.appendChild( target );
+            console.log( 'adding player target!' );
+        };
+
+        const boxDiv = this.createElement( 'div', 'box padbox relative glow' );
+        const graphDiv = this.createElement( 'div', 'graph-paper wide tall' );
+        const borderDiv = this.createElement( 'div', 'border overlay' );
+        
+        boxDiv.appendChild( graphDiv );
+
+        playerDiv.appendChild( targetsDiv );
+        playerDiv.appendChild( boxDiv );
+        playerDiv.appendChild( borderDiv );
+
+        this.modify_GraphPaper( graphDiv, graphpapersize );
+
+        return playerDiv;
     };
 
     getHeight( html ) {
@@ -412,6 +581,7 @@ class DeepLore {
     get getSetup_PieceTray(){ return document.getElementById( ID_setup_pieceTray ) };
     get getSetup_GridDrop(){ return document.getElementById( ID_setup_gridDrop ) };
     get getSetup_FauxShadow(){ return document.getElementById( ID_setup_fauxdrop ) };
+    get getGame_Quit() { return document.getElementById( ID_game_quit )};
     
 
     get getID_Start_play() { return ID_play };
@@ -423,6 +593,8 @@ class DeepLore {
     get getID_Setup_easy() { return ID_setup_easy };
     get getID_Setup_normal() { return ID_setup_normal };
     get getID_Setup_hard() { return ID_setup_hard };
+    get getID_Game_Quit() { return ID_game_quit };
+
 
 }
 

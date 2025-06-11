@@ -119,6 +119,10 @@ function interact( e ) {
             currentDifficulty = difficulty.HARD;
             changeDifficulty( currentDifficulty );
             break;
+        case deepLore.getID_Game_Quit:
+            console.log( 'Quit :(' );
+            newPage = page.START;
+            break;
         default:
             break;
     };
@@ -169,8 +173,8 @@ function loadPage( pageToLoad ){
 
         case page.SETUP:
             console.log( 'loading SETUP!');
-            pageBuilder.modify_ContentTop( content );
-            pageBuilder.modify_ContentWide( content );
+            // pageBuilder.modify_ContentTop( content );
+            // pageBuilder.modify_ContentWide( content );
 
             content.appendChild( pageBuilder.getHTML_Setup_Title() );
             content.appendChild( pageBuilder.getHTML_Setup_Main( gridSize( currentDifficulty ) ) );
@@ -189,6 +193,13 @@ function loadPage( pageToLoad ){
             break;
         case page.GAME:
             console.log( 'loading GAME!');
+
+            content.appendChild( pageBuilder.getHTML_Game_Title() );
+            content.appendChild( pageBuilder.getHTML_Game_Main( gridSize( currentDifficulty ) ) );
+            
+            deepLore.getGame_Quit.addEventListener( 'click', interact );
+
+
             break;
         default:
             console.log( "didn't find page" );
