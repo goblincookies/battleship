@@ -12,6 +12,11 @@ const ID_setup_easy = 'easy';
 const ID_setup_normal = 'normal';
 const ID_setup_hard = 'hard';
 const ID_setup_graphpaper = 'graph-paper';
+const ID_game_targetsPlayer = 'targets-player';
+const ID_game_targetsComp = 'targets-comp';
+const ID_game_prefixComp = 'c-';
+const ID_game_prefixPlayer = 'p-';
+const ID_game_shipDisplayGrid = 'ship-display-grid';
 
 // const ID_ship5 = 'ship-5';
 // const ID_ship4 = 'ship-4';
@@ -201,8 +206,8 @@ class PageBuilder {
         const graphDiv = this.createElement( 'div', 'graph-paper wide tall play-box' );
         const borderDiv = this.createElement( 'div', 'border overlay' );
 
-        const otherDiv = this.createElement( 'div', 'info-size flex v debugB' );
-        const actionBarDiv = this.createElement( 'div', 'flex center-j grow debugA' );
+        const otherDiv = this.createElement( 'div', 'info-size flex v' );
+        const actionBarDiv = this.createElement( 'div', 'flex center-j grow' );
         const trayDiv = this.createElement( 'div', 'button-tray flex h center-a' );
         const safetyboxPillDiv = this.createElement( 'div', 'safetybox flex h center-j wide grow' );
         const pillButton = this.createElement( 'button', 'pill pad-sides hidden' );
@@ -399,6 +404,13 @@ class PageBuilder {
         return mainDiv;
     };
 
+    getHTML_singleShip( id ){
+        // <div class="outline" id="ship-n"></div>
+        const shipDiv = this.createElement( 'div', 'outline ship' );
+        shipDiv.id = `ship-${ id }`;
+        return shipDiv;
+    };
+
     getHTML_Game_Comp( graphpapersize ){
 
         //     <div class="relative comp-size flex v center-j centerpiece">
@@ -428,9 +440,9 @@ class PageBuilder {
         const targetsDiv = this.createElement( 'div', 'targets padbox-comp overlay flex v start-j start-a wrap' );
 
         for ( let n = 0; n < graphpapersize * graphpapersize; n++ ) {
-            let target = this.createElement( 'div', 'target' );
+            let target = this.createElement( 'div', 'target-comp unkown' );
             target.style.width = `calc(100%/${graphpapersize})`;
-            target.id = `c-${n}`;
+            target.id = ID_game_prefixComp + n;
             targetsDiv.appendChild( target );
         };
 
@@ -438,11 +450,14 @@ class PageBuilder {
         const graphDiv = this.createElement( 'div', 'comp-graph-paper wide tall' );
         const shipsDiv = this.createElement( 'div', 'ships padbox-comp overlay' );
         const gridDiv = this.createElement( 'div', 'grid wide tall' );
-        for ( let n = 0; n < 5; n++ ) {
-            let status = this.createElement( 'div', 'outline' );
-            status.id = `ship-${n}`;
-            gridDiv.appendChild( status );
-        };
+        gridDiv.id = ID_game_shipDisplayGrid;
+
+        // for ( let n = 0; n < 5; n++ ) {
+        //     let status = this.createElement( 'div', 'outline' );
+        //     status.id = `ship-${n}`;
+        //     gridDiv.appendChild( status );
+        // };
+
         const borderDiv = this.createElement( 'div', 'comp-border overlay' );
 
         shipsDiv.appendChild( gridDiv );
@@ -495,14 +510,15 @@ class PageBuilder {
         //     </div>
         const playerDiv = this.createElement( 'div', 'relative game-size flex v center-j centerpiece' );
         const targetsDiv = this.createElement( 'div', 'targets padbox overlay flex v start-j start-a wrap' );
+        targetsDiv.id = ID_game_targetsPlayer;
 
         console.log( 'adding targets:', (graphpapersize * graphpapersize) );
         console.log( 'graph size:', graphpapersize );
 
         for ( let n = 0; n < ( graphpapersize * graphpapersize ); n++ ) {
-            const target = this.createElement( 'div', 'target' );
+            const target = this.createElement( 'div', 'target-player target-live' );
             target.style.width = `calc(100%/${graphpapersize})`;
-            target.id = `p-${n}`;
+            target.id = ID_game_prefixPlayer + n;
             targetsDiv.appendChild( target );
             console.log( 'adding player target!' );
         };
@@ -524,6 +540,35 @@ class PageBuilder {
 
     getHeight( html ) {
         return html.getBoundingClientRect().height;
+    };
+
+    falseClick( html ) {
+        html.classList.remove( 'unknown', 'active' );
+        html.classList.add( 'fire' );
+    };
+
+    uncover( html, result ) {
+        // RESULT = { RESULT:0, SHIP: ID, CELLID: ID };
+        // RESULT.RESULT -1 == INVALID
+        // RESULT.RESULT 0 == MISS
+        // RESULT.RESULT 1 == HIT
+
+        html.classList.remove( 'target-live', 'fire' );
+
+
+        if ( result.result < 0 ) {
+            console.log( 'already checked' );
+            return;
+        };
+
+        if ( result.result > 0 ) {
+            // HIT
+            html.classList.add( 'hit' );
+        } else {
+            // MISS
+            html.classList.add( 'miss' );
+        };
+        html.classList.add ( 'seen' );
     };
 
     modify_shipSize( html, height ){
@@ -582,11 +627,13 @@ class DeepLore {
     get getSetup_GridDrop(){ return document.getElementById( ID_setup_gridDrop ) };
     get getSetup_FauxShadow(){ return document.getElementById( ID_setup_fauxdrop ) };
     get getGame_Quit() { return document.getElementById( ID_game_quit )};
+    get getGame_TargetsPlayer() { return document.getElementById( ID_game_targetsPlayer )};
+    get getGame_ShipDisplayGrid() { return document.getElementById( ID_game_shipDisplayGrid )};
     
-
+    
     get getID_Start_play() { return ID_play };
     get getID_Start_quickgame() { return ID_quickgame };
-
+    
     get getID_Setup_back() { return ID_setup_back };
     get getID_Setup_next() { return ID_setup_next };
     get getID_Setup_random() { return ID_setup_random };
@@ -594,7 +641,10 @@ class DeepLore {
     get getID_Setup_normal() { return ID_setup_normal };
     get getID_Setup_hard() { return ID_setup_hard };
     get getID_Game_Quit() { return ID_game_quit };
-
+    
+    getCompCell( id ) {
+        return document.getElementById( ID_game_prefixComp + id );
+    };
 
 }
 

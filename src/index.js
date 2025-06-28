@@ -1,6 +1,7 @@
 import './assets/style.css';
 import { PageBuilder, DeepLore } from './assets/modules/HTMLbuilder';
 import { Interaction, Reaction } from './assets/modules/ACTIONmanager';
+import { Battleship } from './assets/modules/BATTLEship';
 
 console.log( 'hello world!' );
 
@@ -25,18 +26,25 @@ const difficulty = {
     HARD: 2
 }
 
+const owners = {
+        PLAYER: 0,
+        COMPUTER: 1
+};
+
 const pageBuilder = new PageBuilder();
 const deepLore = new DeepLore();
 const reaction = new Reaction();
-
 const interactShipShelf = new Interaction();
+const battleship = new Battleship();
 
 const content = document.getElementById( 'content' );
 let actionBar;
 let currentPage = page.UNKOWN;
 let currentSubPage = page.UNKOWN;
 let currentDifficulty = difficulty.NORMAL;
-
+let isPlayerTurn = true;
+let lastSelected = null;
+let isHunting = false;
 
 function setup(){
     // START
@@ -60,6 +68,149 @@ function resizeWindow( e ) {
         });
 
     };
+};
+
+async function interactTarget( e ) {
+    console.log( 'clicked a target!', e.currentTarget.id );
+    
+    let id = e.currentTarget.id.split( '-' )[ 1 ];
+    let result = battleship.uncover( owners.PLAYER, id );
+    pageBuilder.uncover( e.currentTarget, result );
+
+    e.currentTarget.removeEventListener( 'click', interactTarget );
+
+    let w = gridSize( currentDifficulty );
+
+    for( let i = 0; i < w*w; i++ ) {
+        // TAKE COMPUTER TURN
+        result = await battleship.hunt();
+        console.log( 'comp result:', result )
+        
+        if ( result.cellID < 0 ) {
+            console.log( 'no valid cell' )
+            break;
+        };
+
+        const compCell = deepLore.getCompCell( result.cellID );
+        // PROCESS RESULT
+        
+        // CLICK
+        pageBuilder.falseClick( compCell );
+        // PAUSE ON CLICK
+        await new Promise( ( resolve, reject ) => setTimeout( resolve, 150 ) );
+        // ADD HIT OR MISS
+        pageBuilder.uncover( compCell, result );
+    }
+
+
+    console.log( 'returning control' );
+};
+
+async function computerTurn(){
+    console.log( 'taking computer turn' );
+
+    const gridX = gridSize( currentDifficulty );
+    const totalCells = gridX * gridX;
+
+    // GET LAST SELECTED SQUARE
+    // ELSE RANDOM
+    if ( !lastSelected ) {
+        lastSelected = Math.floor( Math.random() * totalCells );
+    };
+
+    let targetedCell = deepLore.getCompCell( lastSelected );
+    targetedCell.classList.add( 'active' );
+
+
+    // IF HUNTING, MOVE 1 ADJECENT FROM LAST HIT (MUST BE TARGET-LIVE)
+    if ( isHunting ) {
+
+        // HUNT SQUARE == 45
+        let directions = [ 1, -1, gridX, -gridX ];
+        let lastStepHunt = 1;
+        let lastCellResult = result.UNKOWN;
+        if ( huntCell == lastCell ) {
+            // CHOOSE A NEW DIRECTION
+        }
+        if ( lastCellResult != result.HIT_GOAL ) {
+            // CHOOSE A NEW DIRECTION
+        }
+
+    } else {
+
+        // ELSE TAKE RANDOM NUMBER OF STEPS, IN RANDOM NON-REPEATING DIRECTIONS
+        // const steps = Math.floor( 2 + Math.random() * 8 );
+        const steps = 5;
+        console.log( `taking ${ steps } steps` );
+
+        let directions = [ 1, -1, gridX, -gridX ];
+        let index = 0;
+        
+        // WALK THROUGH
+        for ( let s = 0; s < steps; s++ ){
+            // RANDOMIZE NEXT INDEX
+            index = ( index + Math.floor( Math.random() * 3 ) ) % 4;
+            
+            // CHECK AND STOP FOR VERTICAL WRAP
+            if ( ( lastSelected % gridX == 0 ) && ( lastSelected + directions[ index ] ) % gridX == gridX - 1 ) {
+                index -= 1;
+                index = index % directions.length;
+                console.log( 'V - adjusting new index -1', directions[ index ] );
+            };
+
+            if ( ( lastSelected % gridX == gridX - 1 ) && ( lastSelected + directions[ index ] ) % gridX == 0 ) {
+                index += 1;
+                index = index % directions.length;
+                console.log( 'V - adjusting new index +1', directions[ index ] );
+            };
+
+            // CHECK AND STOP HORIZONTAL WRAP
+            if ( ( lastSelected + directions[ index ] ) > totalCells ) {
+                index += 1;
+                index = index % directions.length;
+                console.log( 'H - adjusting new index +1', directions[ index ] );
+            };
+
+            if ( ( lastSelected + directions[ index ] ) < 0 ) {
+                index -= 1;
+                index = index % directions.length;
+                console.log( 'H - adjusting new index -1', directions[ index ] );
+            };
+
+            // BASIC FAIL SAFE TO KEEP IT IN BOUNDS
+            // THIS WILL WRAP
+            lastSelected += directions[ index ];            
+            if ( lastSelected < 0 ){ lastSelected = totalCells + lastSelected };
+            lastSelected = lastSelected %( totalCells );
+            // PAUSE
+            await new Promise( ( resolve, reject ) => setTimeout( resolve, 150 ) );
+
+            // HIGHLIGHT THE NEW CELL
+            targetedCell.classList.remove( 'active' );
+            targetedCell = deepLore.getCompCell( lastSelected );
+            console.log( lastSelected );
+            console.log( targetedCell );
+            targetedCell.classList.add( 'active' );
+        };
+        
+        if ( targetedCell.classList.contains( 'seen' ) ) {
+            // WALK TO NEARST TARGET-LIVE SQUARE
+        };
+    };
+    
+    // CLICK
+    targetedCell.classList.remove( 'unknown' );
+    targetedCell.classList.remove( 'active' );
+    targetedCell.classList.add( 'seen' );
+    targetedCell.classList.add( 'fire' );
+    // PAUSE ON CLICK
+    await new Promise( ( resolve, reject ) => setTimeout( resolve, 350 ) );
+    targetedCell.classList.remove( 'fire' );
+    targetedCell.classList.add( 'miss' );
+    
+
+    console.log( 'returning control' );
+    isPlayerTurn = true;
 };
 
 function interact( e ) {
@@ -194,11 +345,21 @@ function loadPage( pageToLoad ){
         case page.GAME:
             console.log( 'loading GAME!');
 
+            const rowCount = gridSize( currentDifficulty );
+            battleship.setup( rowCount );
             content.appendChild( pageBuilder.getHTML_Game_Title() );
-            content.appendChild( pageBuilder.getHTML_Game_Main( gridSize( currentDifficulty ) ) );
+            content.appendChild( pageBuilder.getHTML_Game_Main( rowCount ) );
             
             deepLore.getGame_Quit.addEventListener( 'click', interact );
 
+            // FOR EACH SQUARE ADD A LISTENER
+            const targets = Array.from( deepLore.getGame_TargetsPlayer.children );
+
+            targets.forEach( target => {
+                target.addEventListener( 'click', interactTarget );
+            });
+
+            battleship.randomlyPlaceShips( owners.PLAYER );
 
             break;
         default:
@@ -227,7 +388,6 @@ function loadSubPage( pageToLoad ) {
                 height = shipHeight( height, currentDifficulty );
                 actionBar.appendChild( pageBuilder.getHTML_Setup_Shipshelf( height ) );
                 
-                // interactShipShelf.reset( deepLore.getSetup_PieceTray );
                 interactShipShelf.setup( deepLore.getSetup_PieceTray, deepLore.getSetup_GridDrop );
                 interactShipShelf.update_grid( height );
                 interactShipShelf.watch( deepLore.getSetup_PieceTray );
@@ -244,6 +404,8 @@ function loadSubPage( pageToLoad ) {
 function preCleaning(){
     content.textContent = '';
     actionBar = null;
-}
+    lastSelected = null;
+    battleship.resetGame();
+};
 
 setup();

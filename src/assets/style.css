@@ -177,18 +177,27 @@ body {
     /* WHY NOT FULL? */
     /* padding: 7.8px; */
 }
-.target{
+
+.target-player,
+.target-comp{
     /* border: 1px solid black; */
     background-color:transparent;
     aspect-ratio: 1;
     width: calc(100%/6);
 }
-.target.miss {
+
+.target-player.miss {
     border: 8px solid transparent;
     background-clip: padding-box;
     background-color: var(--dark);
 }
-.target.hit {
+.target-comp.miss {
+    border: 4px solid transparent;
+    background-clip: padding-box;
+    background-color: var(--dark);
+}
+
+.target-comp.hit {
     border: 1px solid white;
     /* background-clip: padding-box; */
     background-color: var(--hit);
@@ -197,25 +206,50 @@ body {
     drop-shadow( 0px 0px 25px var(--hit) );
     /* animation: hit 1s linear 1s forwards; */
 }
+
+.target-player.hit {
+    border: 1px solid white;
+    /* background-clip: padding-box; */
+    background-color: var(--hit);
+    /* background-image: radial-gradient(transparent 0%, var(--pink) 50%, transparent 55%); */
+    filter: drop-shadow( 0px 0px 3px var(--hit) )
+    drop-shadow( 0px 0px 25px var(--hit) );
+    /* animation: hit 1s linear 1s forwards; */
+}
+.ship,
 .target.ship {
     background-color: var(--ship);
 }
 
-.target:hover{
+.target-live:hover {
     background-color: black;
     border: 3px solid white;
     filter: drop-shadow( 0px 0px 3px var(--green) )
     drop-shadow( 0px 0px 25px var(--green) );
 }
-.target:active{
+
+.target-comp.active {
+    background-color: black;
+    border: 3px solid white;
+    filter: drop-shadow( 0px 0px 3px var(--green) )
+    drop-shadow( 0px 0px 25px var(--green) );
+}
+
+.target-comp.fire {
     background-color: white;
     /* border: 5px solid black; */
     filter: drop-shadow( 0px 0px 3px var(--green) )
     drop-shadow( 0px 0px 25px var(--green) );
 }
 
+.target-live:active {
+    background-color: white;
+    /* border: 5px solid black; */
+    filter: drop-shadow( 0px 0px 3px var(--green) )
+    drop-shadow( 0px 0px 25px var(--green) );
+}
 
-button{
+button {
     cursor: pointer;
 }
 .abs-center {
@@ -318,7 +352,7 @@ button.text:hover {
 #gra5{
     width: calc(90px*5);
 }
-#ship-4{
+/* #ship-4{
     background-color: var(--ship);
     grid-row: 1;
     grid-column: 2/ span 5;
@@ -342,7 +376,7 @@ button.text:hover {
     background-color: var(--ship);
     grid-row: 6;
     grid-column: 5/ span 2;
-}
+} */
 #status-4{
     background-size: 100% 21%;
     height: calc( var(--height-w) * 5);
